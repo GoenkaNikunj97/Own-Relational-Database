@@ -108,12 +108,19 @@ class Parse:
         print(table)
 
         raw_values=re.compile(r'set\s(.*)\swhere').findall(self.query)
-        print(raw_values)
+        val=format(raw_values[0])
+        val_list=re.split('=|,',val)
+        update_values={}
+        for x in range(0,len(val_list),2):
+            column=val_list[x]
+            clm_value=val_list[x+1]
+            update_values[column]=clm_value
+        print(update_values)
         
         #condition
         condition_str=self.query[self.query.find('where'):]
-        condition_column=re.compile(r'where\s(.*)[=|>|<|<=|>=]').findall(condition_str)
-        condition_value=re.compile(r'(=|>|<|<=|>=)(.*)').findall(condition_str)
+        condition_column=re.compile(r'where\s(.*)[=|>|<|<=|>=]\s').findall(condition_str)
+        condition_value=re.compile(r'\s(=|>|<|<=|>=)\s(.*)').findall(condition_str)
         condition=self.formatCondition(condition_column,condition_value)
         print(condition)
         #########

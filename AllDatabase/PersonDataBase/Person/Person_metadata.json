@@ -1,0 +1,1 @@
+{"table_name": "Person", "columns": [{"column_name": "PersonaaaaID", "type": "int"}, {"column_name": "LastName", "type": "str"}, {"column_name": "FirstName", "type": "str"}, {"column_name": "Address", "type": "str"}, {"column_name": "City", "type": "str"}], "primary_key": ["PersonID", "Address"], "foreign_key": []}

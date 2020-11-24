@@ -1,4 +1,4 @@
-InputQuery="Enter the sql Query\n"
+InputQuery="Enter the SQL Query\n"
 select="select"
 update="update"
 delete="delete"

@@ -20,6 +20,8 @@ class Parse:
             self.update()
         elif constants.drop in self.query.lower():
             self.drop()
+        elif "quit" in self.query.lower():
+            return
         else:
             return -1
 
@@ -30,55 +32,65 @@ class Parse:
             # with condition
 
             if constants.where_clause in self.query:
-                raw_columns = re.compile(constants.select_column_RE, re.DOTALL).findall(self.query)
-                columns=self.format(raw_columns[0])
+                raw_columns = re.compile(
+                    constants.select_column_RE, re.DOTALL).findall(self.query)
+                columns = self.format(raw_columns[0])
 
-                table = re.compile(constants.select_table_condition_RE,re.DOTALL).findall(self.query)
-                
-                condition_column = re.compile(constants.select_condition_column_RE, re.DOTALL).findall(self.query)
-                condition_value = re.compile(constants.select_condition_value_RE, re.DOTALL).findall(self.query)
-                
-                condition=self.formatCondition(condition_column,condition_value)
+                table = re.compile(
+                    constants.select_table_condition_RE, re.DOTALL).findall(self.query)
+
+                condition_column = re.compile(
+                    constants.select_condition_column_RE, re.DOTALL).findall(self.query)
+                condition_value = re.compile(
+                    constants.select_condition_value_RE, re.DOTALL).findall(self.query)
+
+                condition = self.formatCondition(
+                    condition_column, condition_value)
 
             #########
-            #return according to need NIKUNJ
+            # return according to need NIKUNJ
             #########
-            
+
             # without condition
             else:
-                raw_columns = re.compile(constants.select_column_RE,re.DOTALL).findall(self.query)
-                columns=self.format(raw_columns[0])
-            
-                table = re.compile(constants.select_table_no_condition_RE,re.DOTALL).findall(self.query)
-            
+                raw_columns = re.compile(
+                    constants.select_column_RE, re.DOTALL).findall(self.query)
+                columns = self.format(raw_columns[0])
+
+                table = re.compile(
+                    constants.select_table_no_condition_RE, re.DOTALL).findall(self.query)
+
             #########
-            #return according to need NIKUNJ
+            # return according to need NIKUNJ
             #########
         except:
-            #to write
+            # to write
             print("incorrect query")
 
     def delete(self):
         try:
             table = re.compile(constants.delete_table_RE).findall(self.query)
-            condition_column = re.compile(constants.delete_condition_column_RE,re.DOTALL).findall(self.query)
-            condition_value = re.compile(constants.delete_condition_value_RE,re.DOTALL).findall(self.query)
+            condition_column = re.compile(
+                constants.delete_condition_column_RE, re.DOTALL).findall(self.query)
+            condition_value = re.compile(
+                constants.delete_condition_value_RE, re.DOTALL).findall(self.query)
             print(table)
-            condition=self.formatCondition(condition_column,condition_value)
+            condition = self.formatCondition(condition_column, condition_value)
             print(condition)
             #########
-            #return according to need NIKUNJ
+            # return according to need NIKUNJ
             #########
         except:
-            #to write
+            # to write
             print("incorrect query")
-    
+
     def insert(self):
 
         table = re.compile(constants.insert_table_RE).findall(self.query)
-        table=table[0]
-        table=table[:table.find('(')]
-        raw_columns = re.compile(constants.insert_columns_RE).findall(self.query)
+        table = table[0]
+        table = table[:table.find('(')]
+        raw_columns = re.compile(
+            constants.insert_columns_RE).findall(self.query)
         raw_values = re.compile(constants.insert_values_RE).findall(self.query)
         values=raw_values[0].split(",")
         columns=raw_columns[0].split(",")
@@ -86,7 +98,7 @@ class Parse:
         print(columns)
         print(table)
         #########
-        #return according to need NIKUNJ
+        # return according to need NIKUNJ
         #########
 
     def create(self):
@@ -130,7 +142,7 @@ class Parse:
         condition=self.formatCondition(condition_column,condition_value)
         print(condition)
         #########
-        #return according to need NIKUNJ
+        # return according to need NIKUNJ
         #########
     def drop(self):
         if "database" in self.query:
@@ -143,11 +155,9 @@ class Parse:
     def format(self,raw_columns):
         columns = raw_columns.split(",")
         return columns
-    
-    #returns condition dictionary
-    def formatCondition(self,column,condition_data):
-        condition_op=condition_data[0][0]
-        condition_val=condition_data[0][1]
-        return {'condition_col' : column[0],'condition_op':condition_op, 'condition_val': condition_val }
 
-
+    # returns condition dictionary
+    def formatCondition(self, column, condition_data):
+        condition_op = condition_data[0][0]
+        condition_val = condition_data[0][1]
+        return {'condition_col': column[0], 'condition_op': condition_op, 'condition_val': condition_val}

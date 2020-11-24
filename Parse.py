@@ -18,6 +18,8 @@ class Parse:
             self.create()
         elif constants.update in self.query.lower():
             self.update()
+        elif constants.drop in self.query.lower():
+            self.drop()
         else:
             return -1
 
@@ -78,8 +80,8 @@ class Parse:
         table=table[:table.find('(')]
         raw_columns = re.compile(constants.insert_columns_RE).findall(self.query)
         raw_values = re.compile(constants.insert_values_RE).findall(self.query)
-        values=format(raw_values[0])
-        columns=format(raw_columns[0])
+        values=raw_values[0].split(",")
+        columns=raw_columns[0].split(",")
         print(values)
         print(columns)
         print(table)
@@ -88,20 +90,24 @@ class Parse:
         #########
 
     def create(self):
-        table = re.compile(r'create table\s(.*)\s\(').findall(self.query)
-        print(table)
-        raw_values=re.compile(r'\((.*)\)').findall(self.query)
-        value_list=raw_values[0].split(",")
-        insert_values={}
-        for val in value_list:
-            temp=val.split()
-            column=str(temp[0])
-            clm_type=str(temp[1])
-            insert_values[column]=clm_type
-        print(insert_values)
-        #########
-        #return according to need NIKUNJ
-        #########
+        if "database" in self.query:
+            database = re.compile(r'create database\s(.*)\s*').findall(self.query)
+            print(database)
+        elif "table" in self.query:
+            table = re.compile(r'create table\s(.*)\s*').findall(self.query)
+            print(table)
+            raw_values=re.compile(r'\((.*)\)').findall(self.query)
+            value_list=raw_values[0].split(",")
+            insert_values={}
+            for val in value_list:
+                temp=val.split()
+                column=str(temp[0])
+                clm_type=str(temp[1])
+                insert_values[column]=clm_type
+            print(insert_values)
+            #########
+            #return according to need NIKUNJ
+            #########
 
     def update(self):
         table = re.compile(r'update\s(.*)\sset').findall(self.query)
@@ -126,6 +132,14 @@ class Parse:
         #########
         #return according to need NIKUNJ
         #########
+    def drop(self):
+        if "database" in self.query:
+            database = re.compile(r'drop database\s(.*)\s*').findall(self.query)
+            print(database)
+        elif "table" in self.query:
+            table=re.compile(r'drop table\s(.*)\s*').findall(self.query)
+            print(table)
+
     def format(self,raw_columns):
         columns = raw_columns.split(",")
         return columns

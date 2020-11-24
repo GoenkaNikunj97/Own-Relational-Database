@@ -4,6 +4,7 @@ update="update"
 delete="delete"
 create="create"
 insert="insert"
+drop="drop"
 
 #select
 all_columns="*"

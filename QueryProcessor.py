@@ -1,5 +1,6 @@
 import os
 import json
+import shutil
 
 # User_defined Classes
 import DataType
@@ -257,3 +258,12 @@ class QueryProcessor:
             json.dump(tableData, f)
 
         return metaData
+
+    def dropTable(self, tableName):
+        tableData = self.getDataFromTable(tableName)
+        tableDir = self.databaseDir + tableName + "/"
+        if(self.checkIfFilePathExist(tableDir)):
+            shutil.rmtree(tableDir)
+        else:
+            raise Exception ("Wrong Table Name")
+

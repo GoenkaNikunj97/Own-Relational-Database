@@ -105,7 +105,7 @@ if __name__ == "__main__":
     '''
 
     #---------SELECT TABLE COMMAND-----------
-    
+    '''
     try:
         #selecting DB, (run CREATE DB CODE FIRST)
         queryProcessor.useDb("PersonDataBase")
@@ -131,4 +131,19 @@ if __name__ == "__main__":
         queryProcessor.selectQuery( tableName, condition = condition, columnListToDisplay = cols)
     except Exception as e:
         print(e)
-    
+    '''
+
+    #----------------DROP TABLE COMMAND-----------------------
+    '''
+
+    try:
+        #selecting DB, (run CREATE DB CODE FIRST)
+        queryProcessor.useDb("PersonDataBase")
+
+        tableName = "PERSON"
+        print("DROP TABLE table_name;")
+        queryProcessor.dropTable(tableName)
+    except Exception as e:
+        print(e)
+
+    '''

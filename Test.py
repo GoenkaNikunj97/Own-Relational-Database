@@ -27,15 +27,14 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
     '''
-
     #---------CREATE TABLE COMMAND-----------
-    '''    
+    
     try:
         #selecting DB, (run CREATE DB CODE FIRST)
         queryProcessor.useDb("PersonDataBase")
 
         #Data And its format needed -- For MALAV
-        tableName = "PERSON2"
+        tableName = "PERSONerw"
         columnDict = {
             'PersonID': 'int',
             'LastName': 'varchar(255)',
@@ -55,8 +54,54 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
     
-    '''
     
+    #---------DELETE TABLE COMMAND-----------
+    '''
+    try:
+        #selecting DB, (run CREATE DB CODE FIRST)
+        queryProcessor.useDb("PersonDataBase")
+
+        tableName = "PERSON"
+
+        condition = {
+                "columnName" : "PersonID",
+                "operator" : ">",
+                "value" : "2"
+            }
+
+        print("DELETE FROM table_name WHERE condition")
+        queryProcessor.deleteQuery(tableName, condition)
+    
+        print("DELETE FROM table_name")
+        queryProcessor.deleteQuery(tableName)
+
+    except Exception as e:
+        print(e)
+    '''
+
+    #---------INSERT TABLE COMMAND-----------
+    
+    try:
+        #selecting DB, (run CREATE DB CODE FIRST)
+        queryProcessor.useDb("PersonDataBase")
+
+        tableName = "PERSONerw"
+
+        valueList = [999 , "sd", "dfsdf", "dfsdeefs", "fdssdfqw"]
+
+        valueList1 = [999 , "sd"]
+        colList = ["PersonID" , "FirstName"]
+
+        print(" INSERT INTO table_name VALUES (value1, value2, value3, ...);")
+        queryProcessor.insertQuery( tableName, valueList = valueList)
+
+        print("INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);")
+        queryProcessor.insertQuery( tableName, valueList=valueList1 ,colList=colList)
+
+        queryProcessor.selectQuery( tableName )
+    except Exception as e:
+        print(e)
+
     #---------SELECT TABLE COMMAND-----------
     '''
     try:
@@ -69,38 +114,19 @@ if __name__ == "__main__":
         condition = {
                 "columnName" : "PersonID",
                 "operator" : "=",
-                "value" : "2"
+                "value" : "999"
             }
-        print(" SELECT * FROM TABLE ")
-        queryProcessor.selectQuery( tableName )
+        #print(" SELECT * FROM TABLE ")
+        #queryProcessor.selectQuery( tableName )
         
         print(" SELECT * FROM TABLE WHERE CONDITION ")
         queryProcessor.selectQuery( tableName, condition = condition )
 
-        print(" SELECT <cols> FROM TABLE")
-        queryProcessor.selectQuery( tableName, columnListToDisplay = cols)
+        #print(" SELECT <cols> FROM TABLE")
+        #queryProcessor.selectQuery( tableName, columnListToDisplay = cols)
 
         print(" SELECT <cols> FROM TABLE WHERE CONDITION ")
         queryProcessor.selectQuery( tableName, condition = condition, columnListToDisplay = cols)
-
-        
-        
     except Exception as e:
         print(e)
-
     '''
-    #---------SELECT TABLE COMMAND-----------
-    
-
-   
-'''
-    
-    condition = {
-                "columnName" : "PersonID",
-                "operator" : "=",
-                "value" : "3"
-            }
-    queryProcessor.readTable( "Person", condition = condition )
-    
-    #queryProcessor.createDB("RAJA")
-'''

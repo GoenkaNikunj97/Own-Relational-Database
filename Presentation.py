@@ -3,18 +3,20 @@ from tabulate import tabulate
 
 def displayJSONListData(fileData):
 
-
-    for key in fileData[0]:
-        print( "{:<10}".format(key)  , end = ' ' )
-    print()    
-    for key in fileData[0]:
-        print( "{:<10}".format("-----")  , end = ' ' )
-    print()
-    keylist = fileData[0].keys()
-    for row in fileData:
-        for key in keylist:
-            print( "{:<10}".format( row[key] )  , end = ' ' )
+    if(len(fileData) == 0):
+        print("NO DATA TO SHOW")
+    else:
+        for key in fileData[0]:
+            print( "{:<10}".format(key)  , end = ' ' )
+        print()    
+        for key in fileData[0]:
+            print( "{:<10}".format("-----")  , end = ' ' )
         print()
+        keylist = fileData[0].keys()
+        for row in fileData:
+            for key in keylist:
+                print( "{:<10}".format( row[key] )  , end = ' ' )
+            print()
     
     '''
     tableContent = list()

@@ -107,7 +107,6 @@ class QueryProcessor:
                     colToCheck = condition["columnName"]
                     operator = condition["operator"]
                     valueToCheck = condition["value"]
-                    valueType = type(valueToCheck)
                     if (colToCheck in row.keys()):
                         if (operator == "="):
                             if (str(row[colToCheck]) == (valueToCheck)):
@@ -136,17 +135,19 @@ class QueryProcessor:
                 '''
                 tableData = data
 
-            if (len(columnListToDisplay) > 0):
+            if ("*" not in (columnListToDisplay)):
                 data = list()
                 for row in tableData:
                     selectedCols = dict()
                     for col in columnListToDisplay:
                         selectedCols[col] = row[col]
                     data.append(selectedCols)
+                '''
                 tableHeader = dict()
                 for key in data[0].keys():
                     tableHeader[key] = ""
                 data.insert(0, tableHeader)
+                '''
                 tableData = data
 
         Presentation.displayJSONListData(tableData)
@@ -256,6 +257,3 @@ class QueryProcessor:
             json.dump(tableData, f)
 
         return metaData
-
-
-

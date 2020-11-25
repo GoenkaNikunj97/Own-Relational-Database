@@ -28,7 +28,7 @@ if __name__ == "__main__":
         print(e)
     '''
     #---------CREATE TABLE COMMAND-----------
-    
+    '''
     try:
         #selecting DB, (run CREATE DB CODE FIRST)
         queryProcessor.useDb("PersonDataBase")
@@ -53,7 +53,8 @@ if __name__ == "__main__":
         
     except Exception as e:
         print(e)
-    
+
+    '''
     
     #---------DELETE TABLE COMMAND-----------
     '''
@@ -80,7 +81,7 @@ if __name__ == "__main__":
     '''
 
     #---------INSERT TABLE COMMAND-----------
-    
+    '''
     try:
         #selecting DB, (run CREATE DB CODE FIRST)
         queryProcessor.useDb("PersonDataBase")
@@ -101,9 +102,10 @@ if __name__ == "__main__":
         queryProcessor.selectQuery( tableName )
     except Exception as e:
         print(e)
+    '''
 
     #---------SELECT TABLE COMMAND-----------
-    '''
+    
     try:
         #selecting DB, (run CREATE DB CODE FIRST)
         queryProcessor.useDb("PersonDataBase")
@@ -113,14 +115,14 @@ if __name__ == "__main__":
         cols = ["PersonID", "FirstName", "City"]
         condition = {
                 "columnName" : "PersonID",
-                "operator" : "=",
+                "operator" : "<",
                 "value" : "999"
             }
         #print(" SELECT * FROM TABLE ")
-        #queryProcessor.selectQuery( tableName )
+        #queryProcessor.selectQuery( tableName, columnListToDisplay = ["*"])
         
-        print(" SELECT * FROM TABLE WHERE CONDITION ")
-        queryProcessor.selectQuery( tableName, condition = condition )
+        #print(" SELECT * FROM TABLE WHERE CONDITION ")
+        #queryProcessor.selectQuery( tableName, condition = condition , columnListToDisplay = ["*"])
 
         #print(" SELECT <cols> FROM TABLE")
         #queryProcessor.selectQuery( tableName, columnListToDisplay = cols)
@@ -129,4 +131,4 @@ if __name__ == "__main__":
         queryProcessor.selectQuery( tableName, condition = condition, columnListToDisplay = cols)
     except Exception as e:
         print(e)
-    '''
+    

@@ -6,6 +6,7 @@ def displayJSONListData(fileData):
     if(len(fileData) == 0):
         print("NO DATA TO SHOW")
     else:
+        print(fileData)
         for key in fileData[0]:
             print( "{:<10}".format(key)  , end = ' ' )
         print()    

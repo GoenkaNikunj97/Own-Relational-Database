@@ -2,6 +2,8 @@ import Parse
 import constants
 from UserLogin import UserLogin
 from UserSignUp import UserSignUp
+from termcolor import colored
+
 
 
 def userLoginSignUp():
@@ -27,19 +29,26 @@ def userLoginSignUp():
 
 def main():
 
-    print("\n#####################################################")
-    print("     Welcome to Team-8 DataBase Management System      ")
-    print("#####################################################\n")
-    userLoginSignUp()
+    print(colored("\n#####################################################",'green'))
+    print(colored("     Welcome to Team-8 DataBase Management System      ",'green'))
+    print(colored("#####################################################\n",'green'))
+    # userLoginSignUp()
     query = ""
     while not query.lower() == "quit":
-        query = input(constants.InputQuery)
-        query_type = Parse.Parse(query)
+        print("\n#####################################################")
+        database=input(colored("Provide Database Name\n",'blue'))
+        if "quit" in database:
+            print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Thanks!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            exit(0)
+        print("\n#####################################################")
+        query = input(colored(constants.InputQuery,'blue'))
+        query_type = Parse.Parse(database,query)
         val = query_type.check_query()
 
         if val == -1:
-            print("Incorrect Query")
+            print(colored("Incorrect Query",'red'))
 
+    print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Thanks!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 if __name__ == "__main__":
     main()

@@ -2,15 +2,27 @@ from tabulate import tabulate
 
 
 def displayJSONListData(fileData):
+
+    if(len(fileData) == 0):
+        print("NO DATA TO SHOW")
+    else:
+        for key in fileData[0]:
+            print( "{:<10}".format(key)  , end = ' ' )
+        print()    
+        for key in fileData[0]:
+            print( "{:<10}".format("-----")  , end = ' ' )
+        print()
+        keylist = fileData[0].keys()
+        for row in fileData:
+            for key in keylist:
+                print( "{:<10}".format( row[key] )  , end = ' ' )
+            print()
+    
+    '''
     tableContent = list()
     for row in fileData:
         tableContent.append(row.values())
 
     print ( tabulate(tableContent, headers= row.keys()))
+    ''' 
         
-        
-data = [[1, 'Liquid', 24, 12],
-[2, 'Virtus.pro', 19, 14],
-[3, 'PSG.LGD', 15, 19],
-[4,'Team Secret', 10, 20]]
-

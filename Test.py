@@ -27,6 +27,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
     '''
+
     #---------CREATE TABLE COMMAND-----------
     '''
     try:
@@ -34,7 +35,7 @@ if __name__ == "__main__":
         queryProcessor.useDb("PersonDataBase")
 
         #Data And its format needed -- For MALAV
-        tableName = "PERSONerw"
+        tableName = "PERSON2"
         columnDict = {
             'PersonID': 'int',
             'LastName': 'varchar(255)',
@@ -53,8 +54,8 @@ if __name__ == "__main__":
         
     except Exception as e:
         print(e)
-
     '''
+    
     
     #---------DELETE TABLE COMMAND-----------
     '''
@@ -133,9 +134,8 @@ if __name__ == "__main__":
         print(e)
     '''
 
-    #----------------DROP TABLE COMMAND-----------------------
+    #-------------------------DROP TABLE COMMAND-----------------------
     '''
-
     try:
         #selecting DB, (run CREATE DB CODE FIRST)
         queryProcessor.useDb("PersonDataBase")
@@ -147,3 +147,31 @@ if __name__ == "__main__":
         print(e)
 
     '''
+
+    #--------------------------UPDATE TABLE COMMAND-----------------------
+    
+    try:
+        tableName = "PERSON2"
+        condition = {
+                "columnName" : "PersonID",
+                "operator" : "=",
+                "value" : "12"
+            }
+        colList = {
+            "PersonID":999,
+            "FirstName":"Nikunj",
+            "City": "Delhi"
+            }
+
+        #selecting DB, (run CREATE DB CODE FIRST)
+        queryProcessor.useDb("PersonDataBase")
+        
+        print(" UPDATE Customers SET ContactName='Juan' WHERE Country='Mexico';")
+        queryProcessor.updateQuery(tableName,colList,condition )
+
+        queryProcessor.selectQuery( "PERSON2", columnListToDisplay = ["*"])
+    except Exception as e:
+        print(e)
+    
+    
+    

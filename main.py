@@ -2,6 +2,10 @@ import Parse
 import constants
 from UserLogin import UserLogin
 from UserSignUp import UserSignUp
+from termcolor import colored
+import re
+import QueryProcessor as qp
+
 
 
 def userLoginSignUp():
@@ -27,19 +31,31 @@ def userLoginSignUp():
 
 def main():
 
-    print("\n#####################################################")
-    print("     Welcome to Team-8 DataBase Management System      ")
-    print("#####################################################\n")
-    userLoginSignUp()
+    print(colored("\n#####################################################",'green'))
+    print(colored("     Welcome to Team-8 DataBase Management System      ",'green'))
+    print(colored("#####################################################\n",'green'))
+    # userLoginSignUp()
     query = ""
-    while not query.lower() == "quit":
-        query = input(constants.InputQuery)
-        query_type = Parse.Parse(query)
+    db=""
+    while not query.lower() == "quit" or db.lower() == "quit":
+        print("\n#####################################################")
+        db = input(constants.InputQuery)
+        if "use" in db.lower():
+            db_raw=re.compile(r'use\s(.*)\s*',re.IGNORECASE).findall(db)
+            database=db_raw[0]
+            query=input()
+        else:
+            query=db
+            database=""       
+        query_type = Parse.Parse(database,query)
         val = query_type.check_query()
 
         if val == -1:
-            print("Incorrect Query")
+            print(colored("Incorrect Query",'red'))
+        elif val == 0:
+            break
 
+    print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Thanks!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 if __name__ == "__main__":
     main()

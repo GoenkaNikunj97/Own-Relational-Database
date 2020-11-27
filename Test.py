@@ -31,7 +31,7 @@ if __name__ == "__main__":
     #---------CREATE TABLE COMMAND-----------
     '''
     try:
-        #selecting DB, (run CREATE DB CODE FIRST)
+        #selecting DB, (run USE DB CODE FIRST)
         queryProcessor.useDb("PersonDataBase")
 
         #Data And its format needed -- For MALAV
@@ -149,7 +149,7 @@ if __name__ == "__main__":
     '''
 
     #--------------------------UPDATE TABLE COMMAND-----------------------
-    
+    '''
     try:
         tableName = "PERSON2"
         condition = {
@@ -172,6 +172,6 @@ if __name__ == "__main__":
         queryProcessor.selectQuery( "PERSON2", columnListToDisplay = ["*"])
     except Exception as e:
         print(e)
-    
+    ''' 
     
     

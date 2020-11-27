@@ -11,18 +11,35 @@ class Parse:
 
     def check_query(self):
         if constants.select in self.query.lower():
+            if self.database == "":
+                print("Database not selected")
+                return
             self.select()
         elif constants.delete in self.query.lower():
+            if self.database == "":
+                print("Database not selected")
+                return
             self.delete()
         elif constants.insert in self.query.lower():
+            if self.database == "":
+                print("Database not selected")
+                return
             self.insert()
         elif constants.create in self.query.lower():
             self.create()
         elif constants.update in self.query.lower():
+            if self.database == "":
+                print("Database not selected")
+                return
             self.update()
         elif constants.drop in self.query.lower():
+            if self.database == "":
+                print("Database not selected")
+                return
             self.drop()
         elif "quit" in self.query.lower():
+            return 0
+        elif "use" in self.query.lower():
             return
         else:
             return -1
@@ -65,17 +82,20 @@ class Parse:
 
     def delete(self):
         try:
-            table = re.compile(constants.delete_table_RE,re.IGNORECASE).findall(self.query)
-            condition_column = re.compile(
-                constants.delete_condition_column_RE, re.IGNORECASE).findall(self.query)
-            condition_value = re.compile(
-                constants.delete_condition_value_RE, re.IGNORECASE).findall(self.query)
-            print(table)
-            condition = self.formatCondition(condition_column, condition_value)
-            print(condition)
-            #########
-            # return according to need NIKUNJ
-            #########
+            self.queryProcessor.useDb(self.database)
+            if constants.where_clause in self.query:
+                tableName = re.compile(constants.delete_table_RE,re.IGNORECASE).findall(self.query)
+                condition_column = re.compile(
+                    constants.delete_condition_column_RE, re.IGNORECASE).findall(self.query)
+                condition_value = re.compile(
+                    constants.delete_condition_value_RE, re.IGNORECASE).findall(self.query)
+                condition = self.formatCondition(condition_column, condition_value)
+                self.queryProcessor.deleteQuery(tableName[0], condition)
+            elif constants.where_clause not in self.query:
+                tableName= re.compile(r'from\s(.*)\s*',re.IGNORECASE).findall(self.query)
+                self.queryProcessor.deleteQuery(tableName[0])
+            
+
         except Exception as e:
             print(e)
 

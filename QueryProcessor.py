@@ -79,7 +79,6 @@ class QueryProcessor:
                 columnInputType = DataType.getPythonBasedDataType(columnDict[key])
                 column[key] = columnInputType
 
-            print(column)
             tabelMatadata["columns"] = column
             tabelMatadata["primary_key"] = primaryKeyList
             tabelMatadata["foreign_key"] = foreignKeyList
@@ -267,3 +266,66 @@ class QueryProcessor:
         else:
             raise Exception ("Wrong Table Name")
 
+    def updateRow(self, tableData, i, colList, metaData):
+        for key in colList.keys():
+           if key in tableData[i].keys():
+               if (type(colList[key]) == type(self.getValueType(metaData[key]))):
+                   tableData[i][key] = colList[key]
+               else:
+                   raise Exception(str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
+           else:
+               raise Exception (key+ " not present in table")
+
+
+
+    def updateQuery(self, tableName, colList, condition ):
+        #" UPDATE Customers SET ContactName='Juan' WHERE Country='Mexico';"
+        tableData = self.getDataFromTable(tableName)
+
+        tableDir = self.databaseDir + tableName + "/"
+        tableDataFilePath = tableDir + tableName + "_metadata.json"
+        metaData = ""
+        with open(tableDataFilePath) as file:
+            metaData = json.load(file)
+        metaData = metaData["columns"]
+
+        if (len(tableData) == 0):
+            print(tableName + " Table is Empty")
+            return
+        else:
+            if (len(condition) > 0):
+                dataLength = len(tableData)
+                i = 0
+                while i < dataLength:
+                    row = tableData[i]
+                    colToCheck = condition["columnName"]
+                    operator = condition["operator"]
+                    valueToCheck = condition["value"]
+                    if (colToCheck in row.keys()):
+                        if operator == "=" :
+                            if (str(row[colToCheck]) == (valueToCheck)):
+                                self.updateRow(tableData, i, colList, metaData)
+                        elif operator == ">":
+                            if (str(row[colToCheck]) > (valueToCheck)):
+                                self.updateRow(tableData, i, colList, metaData)
+                        elif (operator == "<"):
+                            if (str(row[colToCheck]) < (valueToCheck)):
+                                self.updateRow(tableData, i, colList, metaData)
+                        elif (operator == ">="):
+                            if (str(row[colToCheck]) >= (valueToCheck)):
+                                self.updateRow(tableData, i, colList, metaData)
+                        elif (operator == "<="):
+                            if (str(row[colToCheck]) <= (valueToCheck)):
+                                self.updateRow(tableData, i, colList, metaData)
+                        elif (operator == "!="):
+                            if (str(row[colToCheck]) != (valueToCheck)):
+                                self.updateRow(tableData, i, colList, metaData)
+                    i = i + 1
+
+        tableDir = self.databaseDir + tableName + "/"
+        tableDataFilePath = tableDir + tableName + "_data.json"
+        with open(tableDataFilePath, 'w') as f:
+            f.truncate()
+            json.dump(tableData, f)
+
+        print("Table Updated")

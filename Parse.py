@@ -187,13 +187,13 @@ class Parse:
     def drop(self):
         try:
             if "database" in self.query:
-                database = re.compile(r'drop database\s(.*)\s*',re.IGNORECASE).findall(self.query)
+                database = re.compile(r'drop database\s*(.*)\s*',re.IGNORECASE).findall(self.query)
                 print(database)
             elif "table" in self.query:
                 if self.database=="":
                     print("Database Not Selected")
                     return
-                table=re.compile(r'drop table\s(.*)\s*',re.IGNORECASE).findall(self.query)
+                table=re.compile(r'drop table\s*(.*)\s*',re.IGNORECASE).findall(self.query)
                 self.queryProcessor.useDb(self.database)
                 self.queryProcessor.dropTable(table[0])
         except IndexError as e:

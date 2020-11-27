@@ -62,6 +62,7 @@ class QueryProcessor:
         if(self.databaseName == ""):
             raise Exception("Select Database first")
         else:
+            tableName = tableName.rstrip().lstrip()
             tableDir = self.databaseDir + tableName + "/"
             tableMetadatFilePath = tableDir + tableName + "_metadata.json"
             tableDataFilePath = tableDir + tableName + "_data.json"
@@ -258,14 +259,6 @@ class QueryProcessor:
 
         return metaData
 
-    def dropTable(self, tableName):
-        tableData = self.getDataFromTable(tableName)
-        tableDir = self.databaseDir + tableName + "/"
-        if(self.checkIfFilePathExist(tableDir)):
-            shutil.rmtree(tableDir)
-        else:
-            raise Exception ("Wrong Table Name")
-
     def updateRow(self, tableData, i, colList, metaData):
         for key in colList.keys():
            if key in tableData[i].keys():
@@ -275,8 +268,6 @@ class QueryProcessor:
                    raise Exception(str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
            else:
                raise Exception (key+ " not present in table")
-
-
 
     def updateQuery(self, tableName, colList, condition ):
         #" UPDATE Customers SET ContactName='Juan' WHERE Country='Mexico';"
@@ -329,3 +320,11 @@ class QueryProcessor:
             json.dump(tableData, f)
 
         print("Table Updated")
+
+    def dropTable(self, tableName):
+        tableDir = self.databaseDir + tableName + "/"
+        if(self.checkIfFilePathExist(tableDir)):
+            shutil.rmtree(tableDir)
+            print(tableName + " table droped")
+        else:
+            raise Exception ("Wrong Table Name")

@@ -34,7 +34,7 @@ def main():
     print(colored("\n#####################################################",'green'))
     print(colored("     Welcome to Team-8 DataBase Management System      ",'green'))
     print(colored("#####################################################\n",'green'))
-    # userLoginSignUp()
+    userLoginSignUp()
     query = ""
     db=""
     while not query.lower() == "quit" or db.lower() == "quit":

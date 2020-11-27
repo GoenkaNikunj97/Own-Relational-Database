@@ -62,9 +62,10 @@ class Parse:
                 condition_value = re.compile(constants.select_condition_value_RE, re.IGNORECASE).findall(self.query)
 
                 condition = self.formatCondition(condition_column, condition_value)
-            
+                table=tableName[0]
+                table=table.lstrip().rstrip()
                 self.queryProcessor.useDb(self.database)
-                self.queryProcessor.selectQuery( tableName[0], condition = condition, columnListToDisplay = columns)
+                self.queryProcessor.selectQuery( table, condition = condition, columnListToDisplay = columns)
 
             # without condition
             else:
@@ -74,8 +75,10 @@ class Parse:
 
                 tableName = re.compile(
                     constants.select_table_no_condition_RE, re.IGNORECASE).findall(self.query)
+                table=tableName[0]
+                table=table.lstrip().rstrip()
                 self.queryProcessor.useDb(self.database)
-                self.queryProcessor.selectQuery( tableName[0], columnListToDisplay = columns)
+                self.queryProcessor.selectQuery( table, columnListToDisplay = columns)
         except IndexError as e:
             print("Error in Query Syntax")
         except Exception as e:
@@ -91,10 +94,14 @@ class Parse:
                 condition_value = re.compile(
                     constants.delete_condition_value_RE, re.IGNORECASE).findall(self.query)
                 condition = self.formatCondition(condition_column, condition_value)
-                self.queryProcessor.deleteQuery(tableName[0], condition)
+                table=tableName[0]
+                table=table.lstrip().rstrip()
+                self.queryProcessor.deleteQuery(table, condition)
             elif constants.where_clause not in self.query:
                 tableName= re.compile(r'from\s(.*)\s*',re.IGNORECASE).findall(self.query)
-                self.queryProcessor.deleteQuery(tableName[0])
+                table=tableName[0]
+                table=table.lstrip().rstrip()
+                self.queryProcessor.deleteQuery(table)
         except IndexError as e:
             print("Error in Query Syntax")
         except Exception as e:
@@ -105,6 +112,7 @@ class Parse:
             table = re.compile(constants.insert_table_RE,re.IGNORECASE).findall(self.query)
             table = table[0]
             table = table[:table.find('(')]
+            table=table.lstrip().rstrip()
             raw_columns = re.compile(constants.insert_columns_RE,re.IGNORECASE).findall(self.query)
             raw_values = re.compile(constants.insert_values_RE,re.IGNORECASE).findall(self.query)
             values=raw_values[0].split(",")
@@ -146,8 +154,10 @@ class Parse:
                     column=str(temp[0])
                     clm_type=str(temp[1])
                     columnDict[column]=clm_type
+                table=tableName[0]
+                table=table.lstrip().rstrip()
                 self.queryProcessor.useDb(self.database)
-                self.queryProcessor.createTable(tableName[0], columnDict, primaryKeyList, foreignKeyList)
+                self.queryProcessor.createTable(table, columnDict, primaryKeyList, foreignKeyList)
         except IndexError as e:
             print("Error in Query Syntax")
         except Exception as e:
@@ -155,8 +165,8 @@ class Parse:
 
     def update(self):
         try:
-            table = re.compile(r'update\s(.*)\sset',re.IGNORECASE).findall(self.query)
-            print(table)
+            tableName = re.compile(r'update\s(.*)\sset',re.IGNORECASE).findall(self.query)
+            print(tableName)
 
             raw_values=re.compile(r'set\s(.*)\swhere',re.IGNORECASE).findall(self.query)
             val=format(raw_values[0])
@@ -175,9 +185,10 @@ class Parse:
             condition=self.formatCondition(condition_column,condition_value)
 
             print(condition)
-            
+            table=tableName[0]
+            table=table.lstrip().rstrip()
             self.queryProcessor.useDb(self.database)
-            self.queryProcessor.updateQuery(table[0],update_values,condition)
+            self.queryProcessor.updateQuery(table,update_values,condition)
         except IndexError as e:
             print("Error in Query Syntax")   
         except Exception as e:
@@ -193,9 +204,11 @@ class Parse:
                 if self.database=="":
                     print("Database Not Selected")
                     return
-                table=re.compile(r'drop table\s*(.*)\s*',re.IGNORECASE).findall(self.query)
+                tableName=re.compile(r'drop table\s*(.*)\s*',re.IGNORECASE).findall(self.query)
+                table=tableName[0]
+                table=table.lstrip().rstrip()
                 self.queryProcessor.useDb(self.database)
-                self.queryProcessor.dropTable(table[0])
+                self.queryProcessor.dropTable(table)
         except IndexError as e:
             print("Error in Query Syntax")
         except Exception as e:

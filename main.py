@@ -36,20 +36,20 @@ def main():
     print(colored("#####################################################\n",'green'))
     userLoginSignUp()
     query = ""
-    db=""
-    while not query.lower() == "quit" or db.lower() == "quit":
-        print("\n#####################################################")
-        db = input(constants.InputQuery)
-        if "use" in db.lower():
-            db_raw=re.compile(r'use\s(.*)\s*',re.IGNORECASE).findall(db)
+    database=""
+
+    while not query.lower() == "quit":
+        query=input(constants.InputQuery)
+
+        if "use" in query.lower():
+            db_raw=re.compile(r'use\s(.*)\s*',re.IGNORECASE).findall(query)
             database=db_raw[0]
             query=input()
         else:
-            query=db
-            database=""       
+            database
         query_type = Parse.Parse(database,query)
         val = query_type.check_query()
-
+        print("\n#####################################################")
         if val == -1:
             print(colored("Incorrect Query",'red'))
         elif val == 0:

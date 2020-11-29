@@ -1,5 +1,11 @@
 import json
 import os
+import base64
+
+
+def decodingPassword(password):
+    decrpyt_password = base64.b64encode(bytes(password, 'utf-8'))
+    return decrpyt_password
 
 
 class UserLogin:
@@ -18,11 +24,10 @@ class UserLogin:
                 credentialsData = json.load(file)
                 if len(credentialsData) > 0:
                     user_found = False
-                    pass_matched = False
                     for entry in credentialsData:
                         if entry["userID"] == self.userId:
                             user_found = True
-                            if entry["password"] == self.password:
+                            if entry["password"] == str(decodingPassword(self.password)):
                                 pass_matched = True
                             else:
                                 pass_matched = False

@@ -1,5 +1,11 @@
 import json
 import os
+import base64
+
+
+def encodingPassword(password):
+    encrpyt_password = base64.b64encode(bytes(password, 'utf-8'))
+    return encrpyt_password
 
 
 class UserSignUp:
@@ -13,13 +19,13 @@ class UserSignUp:
         self.missingFile = "UserCredential file does not exists"
 
     def signUp(self):
-
         if not os.path.exists(self.credentialsFileFullPath):
             f = open(self.credentialsFileFullPath, "w")
             f.write("[]")
             f.close()
 
-        new_entry = {'userID': self.userId, 'password': self.password}
+        encrypted_password = encodingPassword(self.password)
+        new_entry = {'userID': self.userId, 'password': str(encrypted_password)}
         with open(self.credentialsFileFullPath, "r+") as file:
             credentialsData = json.load(file)
             if len(credentialsData) > 0:
@@ -42,3 +48,13 @@ class UserSignUp:
                 credentialsData.append(new_entry)
                 file.seek(0)
                 json.dump(credentialsData, file)
+
+#
+# def encode(data):
+#     return urlsafe_b64encode(bytes(data, 'utf-8'))
+#
+# def decode(enc):
+#     return urlsafe_b64decode(enc).decode()
+#
+# print(encode('hi')) # b'aGk='
+# print(decode(encode('hi'))) # 'hi'

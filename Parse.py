@@ -1,9 +1,10 @@
 import constants
 import re
 import QueryProcessor as qp
-
+import Logging as logging
 
 class Parse:
+    log=logging.Logging()
     queryProcessor = qp.QueryProcessor()    
     def __init__(self,database, query):
         database=database.replace(";","")
@@ -17,16 +18,19 @@ class Parse:
     def check_query(self):
         if constants.select in self.query.lower():
             if self.database == "":
-                print("Database not selected")
+                self.log.pushLog(self.query,constants.db_missing)
+                print(constants.db_missing)
                 return
             self.select()
         elif constants.delete in self.query.lower():
             if self.database == "":
+                self.log.pushLog(self.query,constants.db_missing)
                 print("Database not selected")
                 return
             self.delete()
         elif constants.insert in self.query.lower():
             if self.database == "":
+                self.log.pushLog(self.query,constants.db_missing)
                 print("Database not selected")
                 return
             self.insert()
@@ -34,11 +38,11 @@ class Parse:
             self.create()
         elif constants.update in self.query.lower():
             if self.database == "":
+                self.log.pushLog(self.query,constants.db_missing)
                 print("Database not selected")
                 return
             self.update()
         elif constants.drop in self.query.lower():
-           
             self.drop()
         elif "quit" in self.query.lower():
             return 0
@@ -66,6 +70,7 @@ class Parse:
                 table=table.lstrip().rstrip()
                 self.queryProcessor.useDb(self.database)
                 self.queryProcessor.selectQuery( table, condition = condition, columnListToDisplay = columns)
+                self.log.pushLog(self.query,"Selected "+table+" from "+" database " +self.database)
 
             # without condition
             else:
@@ -79,9 +84,13 @@ class Parse:
                 table=table.lstrip().rstrip()
                 self.queryProcessor.useDb(self.database)
                 self.queryProcessor.selectQuery( table, columnListToDisplay = columns)
+                self.log.pushLog(self.query,"Selected "+table+" from "+" database "+self.database)
+
         except IndexError as e:
+            self.log.pushLog(self.query,"Error in select query syntax")
             print("Error in Query Syntax")
         except Exception as e:
+            self.log.pushLog(self.query,str(e))
             print(e)
 
     def delete(self):
@@ -97,14 +106,18 @@ class Parse:
                 table=tableName[0]
                 table=table.lstrip().rstrip()
                 self.queryProcessor.deleteQuery(table, condition)
+                self.log.pushLog(self.query,"Data deleted from table "+table+" of database " +self.database)
             elif constants.where_clause not in self.query:
                 tableName= re.compile(r'from\s(.*)\s*',re.IGNORECASE).findall(self.query)
                 table=tableName[0]
                 table=table.lstrip().rstrip()
                 self.queryProcessor.deleteQuery(table)
+                self.log.pushLog(self.query,"Data successfully deleted from table "+table+" of database " +self.database)
         except IndexError as e:
+            self.log.pushLog(self.query,"Error in select query syntax")
             print("Error in Query Syntax")
         except Exception as e:
+            self.log.pushLog(self.query,str(e))
             print(e)
 
     def insert(self):
@@ -119,9 +132,12 @@ class Parse:
             columns=raw_columns[0].split(",")
             self.queryProcessor.useDb(self.database)
             self.queryProcessor.insertQuery(table,valueList=values,colList=columns)
+            self.log.pushLog(self.query,"Data successfully inserted into table " +table+" of database "+ self.database )
         except IndexError as e:
+            self.log.pushLog(self.query,"Error in select query syntax")
             print("Error in Query Syntax") 
         except Exception as e:
+            self.log.pushLog(self.query,str(e))
             print(e)
 
     def create(self):
@@ -129,6 +145,7 @@ class Parse:
             if "database" in self.query:
                 database = re.compile(r'create database\s(.*)\s*',re.IGNORECASE).findall(self.query)
                 self.queryProcessor.createDB(database[0])
+                self.log.pushLog(self.query,"Successfully created database "+self.database)
             elif "table" in self.query:
                 raw_values=re.compile(r'\((.*)\)',re.IGNORECASE).findall(self.query)
                 foreignKeyList=[]                
@@ -136,7 +153,6 @@ class Parse:
                 if "primary" in raw_values[0].lower():
                     tableName = re.compile(r'create table\s*(.*)\s*\(+?',re.IGNORECASE).findall(self.query)
                     tableName = re.compile(r'\s*(.*)\s\(',re.IGNORECASE).findall(str(tableName[0]))
-                    print(tableName)
                     foreignKeyList=[]                
                     primaryKeyList=re.compile(r'primary key \((.*)\)',re.IGNORECASE).findall(raw_values[0])
 
@@ -158,16 +174,17 @@ class Parse:
                 table=table.lstrip().rstrip()
                 self.queryProcessor.useDb(self.database)
                 self.queryProcessor.createTable(table, columnDict, primaryKeyList, foreignKeyList)
+                self.log.pushLog(self.query,"Successfully created table "+table+" from database " +self.database)
         except IndexError as e:
+            self.log.pushLog(self.query,"Error in select query syntax")
             print("Error in Query Syntax")
         except Exception as e:
+            self.log.pushLog(self.query,str(e))
             print(e)
 
     def update(self):
         try:
             tableName = re.compile(r'update\s(.*)\sset',re.IGNORECASE).findall(self.query)
-            print(tableName)
-
             raw_values=re.compile(r'set\s(.*)\swhere',re.IGNORECASE).findall(self.query)
             val=format(raw_values[0])
             val_list=re.split('=|,',val)
@@ -189,19 +206,23 @@ class Parse:
             table=table.lstrip().rstrip()
             self.queryProcessor.useDb(self.database)
             self.queryProcessor.updateQuery(table,update_values,condition)
+            self.log.pushLog(self.query,"Data successfully update in table "+table+" from database "+self.database)
         except IndexError as e:
+            self.log.pushLog(self.query,"Error in select query syntax")
             print("Error in Query Syntax")   
         except Exception as e:
-                print(e)
+            self.log.pushLog(self.query,str(e))
+            print(e)
 
 
     def drop(self):
         try:
             if "database" in self.query:
-                database = re.compile(r'drop database\s*(.*)\s*',re.IGNORECASE).findall(self.query)
-                print(database)
+                database_drop = re.compile(r'drop database\s*(.*)\s*',re.IGNORECASE).findall(self.query)
+                self.log.pushLog(self.query,"Successfully dropped database "+self.database)
             elif "table" in self.query:
                 if self.database=="":
+                    self.log.pushLog(self.query,"Database Not Selected") 
                     print("Database Not Selected")
                     return
                 tableName=re.compile(r'drop table\s*(.*)\s*',re.IGNORECASE).findall(self.query)
@@ -209,9 +230,12 @@ class Parse:
                 table=table.lstrip().rstrip()
                 self.queryProcessor.useDb(self.database)
                 self.queryProcessor.dropTable(table)
+                self.log.pushLog(self.query,"Successfully dropped table "+table+" from database "+self.database)
         except IndexError as e:
+            self.log.pushLog(self.query,"Error in select query syntax")
             print("Error in Query Syntax")
         except Exception as e:
+            self.log.pushLog(self.query,str(e))
             print(e)
     def format(self,raw_columns):
         columns = raw_columns.split(",")

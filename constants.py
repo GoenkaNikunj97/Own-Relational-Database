@@ -24,3 +24,6 @@ delete_condition_value_RE=r'(=|>|<|<=|>=)(.*)'
 insert_table_RE=r'insert into\s*(.*)\s*\('
 insert_columns_RE=r'\((.*?)\)\svalues'
 insert_values_RE=r'values\s\((.*)\).*'
+
+#errors
+db_missing ="Database not selected"

@@ -7,7 +7,6 @@ import re
 import QueryProcessor as qp
 
 
-
 def userLoginSignUp():
     existing_member = input("Are you an existing member Y/N: ")
     if existing_member.upper() == "Y" or existing_member.upper() == "N":
@@ -40,7 +39,6 @@ def main():
 
     while not query.lower() == "quit":
         query=input(constants.InputQuery)
-
         if "use" in query.lower():
             db_raw=re.compile(r'use\s(.*)\s*',re.IGNORECASE).findall(query)
             database=db_raw[0]
@@ -54,7 +52,8 @@ def main():
             print(colored("Incorrect Query",'red'))
         elif val == 0:
             break
-
+    
+    
     print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Thanks!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 if __name__ == "__main__":

@@ -217,6 +217,7 @@ class QueryProcessor:
         if savePoint == "" :
             self.tableDataList = self.tableDataList[:1]
             print("rolled back to orignal file")
+            self.transaction=False
         elif savePoint in self.savePointDict.keys():
             print(self.tableDataList[:self.savePointDict[savePoint]])
             print(len(self.tableDataList))

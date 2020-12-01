@@ -37,10 +37,10 @@ def main():
     query = ""
     database=""
     queryProcessor=qp.QueryProcessor()
-
     while not query.lower() == "quit":
         query=input(constants.InputQuery)
         if "use" in query.lower():
+            Parse.Parse.newDB=True
             db_raw=re.compile(r'use\s(.*)\s*',re.IGNORECASE).findall(query)
             database=db_raw[0]
             query=input()

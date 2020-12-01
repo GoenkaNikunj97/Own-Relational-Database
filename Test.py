@@ -186,6 +186,7 @@ if __name__ == "__main__":
         print(e)
     '''
     #-------------------------TRANSACTION COMMAND-----------------------
+    '''
     try:
         dbname = "abcd"
         table = "nikunj"
@@ -255,3 +256,11 @@ if __name__ == "__main__":
     
     except Exception as e:
         print(e)
+    '''
+
+
+    queryProcessor.useDb('abcd')
+    queryProcessor.describeTable("nikunj2")
+
+    time.sleep(20)
+    queryProcessor.describeDb('abcd')

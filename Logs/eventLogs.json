@@ -1,4 +1,59 @@
 {
     "logs": [
+        {
+            "Execution Time": "2020-12-01 16:22:47",
+            "query": "select * from test",
+            "message": "Selected test from  database abc"
+        },
+        {
+            "Execution Time": "2020-12-01 16:23:07",
+            "query": "insert into test (col,col2) values (malav,3)",
+            "message": "Data successfully inserted into table test of database abc"
+        },
+        {
+            "Execution Time": "2020-12-01 16:23:09",
+            "query": "select * from test",
+            "message": "Selected test from  database abc"
+        },
+        {
+            "Execution Time": "2020-12-01 16:23:27",
+            "query": "delete from test where col2=3",
+            "message": "Data deleted from table test of database abc"
+        },
+        {
+            "Execution Time": "2020-12-01 16:23:31",
+            "query": "select * from test",
+            "message": "Selected test from  database abc"
+        },
+        {
+            "Execution Time": "2020-12-01 16:23:38",
+            "query": "select * from test",
+            "message": "Selected test from  database abc"
+        },
+        {
+            "Execution Time": "2020-12-01 16:23:51",
+            "query": "select * from test",
+            "message": "Selected test from  database abc"
+        },
+        {
+            "Execution Time": "2020-12-01 16:24:15",
+            "query": "select * from test",
+            "message": "Selected test from  database abc"
+        },
+        {
+            "Execution Time": "2020-12-01 16:26:03",
+            "query": "drop database xyz",
+            "message": "Successfully dropped database "
+        },
+        {
+            "Execution Time": "2020-12-01 16:27:43",
+            "query": "drop table test",
+            "message": "Database Not Selected"
+        },
+        {
+            "Execution Time": "2020-12-01 16:30:18",
+            "query": "describe demo",
+            "message": "Describe table demo from database info"
+        }
     ]
 }

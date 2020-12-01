@@ -1,6 +1,7 @@
 import os
 import json
 import shutil
+from termcolor import colored
 # User_defined Classes
 import DataType
 import Presentation
@@ -10,8 +11,7 @@ class QueryProcessor:
         self.databaseName = ""
         self.databaseDir = ""
         self.transaction = False
-
-    #==========================common methods used below===========================================
+    # ==========================common methods used below===========================================
     def checkIfFilePathExist(self, dirName):
         if os.path.exists(dirName):
             return True
@@ -55,86 +55,6 @@ class QueryProcessor:
             json.dump(tableData, f)
 
     # ============================== commands not afftected by transaction =========================================
-        def useDb(self, DBName):
-            dbDir = "AllDatabase/" + DBName
-            if (self.checkIfFilePathExist(dbDir)):
-                self.databaseName = DBName
-                self.databaseDir = "AllDatabase/" + self.databaseName + "/"
-                print(self.databaseName, " Selected")
-            else:
-                raise Exception("Database " + DBName + " Does Not Exist")
-
-        def createDB(self, DBName):
-            dbDir = "AllDatabase/" + DBName
-            if (self.checkIfFilePathExist(dbDir)):
-                raise Exception("Database already Exist")
-            else:
-                print(DBName, " Created")
-                os.makedirs(dbDir)
-                self.useDb(DBName)
-
-        def dropDb(self, databaseName):
-            databaseDir = "AllDatabase/" + databaseName
-            if (self.checkIfFilePathExist(databaseDir)):
-                shutil.rmtree(databaseDir)
-                print(databaseName + " Database droped")
-            else:
-                raise Exception("Database does not exist " + databaseName)
-
-        def createTable(self, tableName, columnDict, primaryKeyList, foreignKeyList=[]):
-            if (self.databaseName == ""):
-                raise Exception("Select Database first")
-            else:
-                tableName = tableName.rstrip().lstrip()
-                tableDir = self.databaseDir + tableName + "/"
-                tableMetadatFilePath = tableDir + tableName + "_metadata.json"
-                tableDataFilePath = tableDir + tableName + "_data.json"
-
-                if self.checkIfFilePathExist(tableDir):
-                    raise Exception("table already Exist")
-                else:
-                    os.makedirs(tableDir)
-
-                tabelMatadata = dict()
-                tabelMatadata["table_name"] = tableName
-
-                column = dict()
-                for key in columnDict.keys():
-                    columnInputType = DataType.getPythonBasedDataType(columnDict[key])
-                    column[key] = columnInputType
-
-                tabelMatadata["columns"] = column
-                tabelMatadata["primary_key"] = primaryKeyList
-                tabelMatadata["foreign_key"] = foreignKeyList
-                tabelMatadata = json.dumps(tabelMatadata)
-
-                with open(tableMetadatFilePath, 'w') as f:
-                    f.truncate()
-                    f.write(tabelMatadata)
-
-                with open(tableDataFilePath, 'w') as f:
-                    f.truncate()
-                    f.write("[]")
-
-                print(tableName + " Table Created")
-
-        def dropTable(self, tableName):
-            tableDir = self.databaseDir + tableName + "/"
-            if (self.checkIfFilePathExist(tableDir)):
-                shutil.rmtree(tableDir)
-                print(tableName + " table dropped")
-            else:
-                raise Exception("Wrong Table Name")
-
-    #========================================query that dont use Transactions====================================
-    def dropTable(self, tableName):
-        tableDir = self.databaseDir + tableName + "/"
-        if (self.checkIfFilePathExist(tableDir)):
-            shutil.rmtree(tableDir)
-            print(tableName + " table droped")
-        else:
-            raise Exception("Wrong Table Name")
-
     def useDb(self, DBName):
         dbDir = "AllDatabase/" + DBName
         if (self.checkIfFilePathExist(dbDir)):
@@ -144,6 +64,15 @@ class QueryProcessor:
         else:
             raise Exception("Database " + DBName + " Does Not Exist")
 
+    def createDB(self, DBName):
+        dbDir = "AllDatabase/" + DBName
+        if (self.checkIfFilePathExist(dbDir)):
+            raise Exception("Database already Exist")
+        else:
+            print(DBName, " Created")
+            os.makedirs(dbDir)
+            self.useDb(DBName)
+
     def dropDb(self, databaseName):
         databaseDir = "AllDatabase/" + databaseName
         if (self.checkIfFilePathExist(databaseDir)):
@@ -151,15 +80,6 @@ class QueryProcessor:
             print(databaseName + " Database droped")
         else:
             raise Exception("Database does not exist " + databaseName)
-
-    def createDB(self, DBName):
-        dbDir = "AllDatabase/" + DBName
-        if (self.checkIfFilePathExist(dbDir)):
-            raise Exception("Database already Exist")
-        else:
-            os.makedirs(dbDir)
-            print(DBName, " Created")
-            self.useDb(DBName)
 
     def createTable(self, tableName, columnDict, primaryKeyList, foreignKeyList=[]):
         if (self.databaseName == ""):
@@ -174,10 +94,8 @@ class QueryProcessor:
                 raise Exception("table already Exist")
             else:
                 os.makedirs(tableDir)
-
             tabelMatadata = dict()
             tabelMatadata["table_name"] = tableName
-
             column = dict()
             for key in columnDict.keys():
                 columnInputType = DataType.getPythonBasedDataType(columnDict[key])
@@ -187,24 +105,31 @@ class QueryProcessor:
             tabelMatadata["primary_key"] = primaryKeyList
             tabelMatadata["foreign_key"] = foreignKeyList
             tabelMatadata = json.dumps(tabelMatadata)
-
             with open(tableMetadatFilePath, 'w') as f:
                 f.truncate()
                 f.write(tabelMatadata)
-
             with open(tableDataFilePath, 'w') as f:
                 f.truncate()
                 f.write("[]")
-
             print(tableName + " Table Created")
-    #================================== Transaction COMMANDS ====================================================
+
+    def dropTable(self, tableName):
+        tableDir = self.databaseDir + tableName + "/"
+        if (self.checkIfFilePathExist(tableDir)):
+            shutil.rmtree(tableDir)
+            print(tableName + " table dropped")
+        else:
+            raise Exception("Wrong Table Name")
+
+ 
+    # ================================== Transaction COMMANDS ====================================================
     def startTransaction(self, DbName, tableName):
         self.transaction = True
         self.tableName = tableName
         self.tableDataList = list()
-        self.savePointDict = dict() #{ 'name': index, }
+        self.savePointDict = dict()  # { 'name': index, }
         self.useDb(DbName)
-        self.tableDataPath =  "AllDatabase/" + DbName + tableName + "_data.json"
+        self.tableDataPath = "AllDatabase/" + DbName + tableName + "_data.json"
         self.tableDataList.append(self.getDataFromTable(tableName))
         print("transaction started")
 
@@ -212,21 +137,17 @@ class QueryProcessor:
         self.savePointDict[name] = len(self.tableDataList) - 1
         print("Save point set")
 
-    def rollback(self, savePoint = ""):
-        if savePoint == "" :
+    def rollback(self, savePoint=""):
+        if savePoint == "":
             self.tableDataList = self.tableDataList[:1]
             print("rolled back to orignal file")
-            self.transaction=False
         elif savePoint in self.savePointDict.keys():
-            print(self.tableDataList[:self.savePointDict[savePoint]])
-            print(len(self.tableDataList))
-            data = self.tableDataList[:self.savePointDict[savePoint]]
-            print(len(data),"dddddddddddddddddddddddd")
-            self.tableDataList = self.tableDataList[:self.savePointDict[savePoint]]
-            print(len(self.tableDataList))
-            print("rollbacked to save point "+ savePoint)
+            # rollback to save point
+            while len(self.tableDataList) > self.savePointDict[savePoint] + 1:
+                self.tableDataList.pop()
+            print("Rolled back to :" + savePoint)
         else:
-            raise Exception ("No such savepoint present")
+            raise Exception("No such savepoint present")
 
     def commit(self):
         tableData = self.tableDataList[-1]
@@ -238,11 +159,18 @@ class QueryProcessor:
     def isTransaction(self):
         return self.transaction
 
+        # ========================================query that dont use Transactions====================================
+
+
+
     # ============================== commands afftected by transaction =========================================
     def selectQuery(self, tableName, columnListToDisplay=[], condition={}):
         if self.isTransaction():
-            tableData = self.tableDataList[-1]
-            tableName = self.tableName
+            if (tableName == self.tableName):
+                tableData = self.tableDataList[-1].copy()
+            else:
+                raise Exception(
+                    "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
         if (len(tableData) == 0):
@@ -296,13 +224,16 @@ class QueryProcessor:
                 '''
                 tableData = data
 
-        #Display to user
+        # Display to user
         Presentation.displayJSONListData(tableData)
 
     def deleteQuery(self, tableName, condition=[]):
         if self.isTransaction():
-            tableData = self.tableDataList[-1]
-            tableName = self.tableName
+            if (tableName == self.tableName):
+                tableData = self.tableDataList[-1].copy()
+            else:
+                raise Exception(
+                    "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
         if (len(tableData) == 0):
@@ -365,8 +296,11 @@ class QueryProcessor:
 
     def insertQuery(self, tableName, valueList, colList=[]):
         if self.isTransaction():
-            tableData = self.tableDataList[-1]
-            tableName = self.tableName
+            if (tableName == self.tableName):
+                tableData = self.tableDataList[-1].copy()
+            else:
+                raise Exception(
+                    "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
         tableDir = self.databaseDir + tableName + "/"
@@ -384,11 +318,13 @@ class QueryProcessor:
                         try:
                             dataInNeededFormat = self.getDataInRequiredFormat(valueList[i])
                         except:
-                            raise Exception(str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
+                            raise Exception(
+                                str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
                         if (type(dataInNeededFormat) == type(self.getValueType(metaData[key]))):
                             dataRow[key] = dataInNeededFormat
                         else:
-                            raise Exception(str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
+                            raise Exception(
+                                str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
                     else:
                         # its in str format so just put it in
                         dataRow[key] = valueList[i]
@@ -409,11 +345,13 @@ class QueryProcessor:
                         try:
                             dataInNeededFormat = self.getDataInRequiredFormat(valueList[i])
                         except:
-                            raise Exception(str(col) + " should be of type " + str(type(self.getValueType(metaData[col]))))
+                            raise Exception(
+                                str(col) + " should be of type " + str(type(self.getValueType(metaData[col]))))
                         if (type(dataInNeededFormat) == type(self.getValueType(metaData[col]))):
                             dataRow[col] = dataInNeededFormat
                         else:
-                            raise Exception(str(col) + " should be of type " + str(type(self.getValueType(metaData[col]))))
+                            raise Exception(
+                                str(col) + " should be of type " + str(type(self.getValueType(metaData[col]))))
                     else:
                         dataRow[col] = valueList[i]
                 i = i + 1
@@ -436,7 +374,7 @@ class QueryProcessor:
 
         return metaData
 
-    #method made just of Update query
+    # method made just of Update query
     def updateRow(self, tableData, i, colList, metaData):
         for key in colList.keys():
             if key in tableData[i].keys():
@@ -449,8 +387,11 @@ class QueryProcessor:
 
     def updateQuery(self, tableName, colList, condition):
         if self.isTransaction():
-            tableData = self.tableDataList[-1]
-            tableName = self.tableName
+            if (tableName == self.tableName):
+                tableData = self.tableDataList[-1].copy()
+            else:
+                raise Exception(
+                    "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
 
@@ -503,3 +444,35 @@ class QueryProcessor:
                 json.dump(tableData, f)
 
         print("Table Updated")
+
+    def describeTable(self, tableName):
+        if self.isTransaction():
+            if (tableName == self.tableName):
+                tableData = self.tableDataList[-1].copy()
+            else:
+                raise Exception(
+                    "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
+        else:
+            tableDir = self.databaseDir + tableName + "/"
+            tableDataFilePath = tableDir + tableName + "_metadata.json"
+            metaData = ""
+            with open(tableDataFilePath) as file:
+                metaData = json.load(file)
+
+            print(colored("\n#####################################################", 'green'))
+            print(colored("\n        STRUCTURE FOR TABLE: " + tableName, 'green'))
+            print("{:<30}".format("Column Name"), end=' ')
+            print("{:<30}".format("Data Type"), end=' ')
+            print()
+            for key in metaData["columns"]:
+                print("{:<30}".format(key), end=' ')
+                print("{:<30}".format(metaData["columns"][key]), end=' ')
+                print()
+            print(colored("\n#####################################################", 'green'))
+
+    def describeDb(self, dbName):
+        print(colored("\n#####################################################", 'green'))
+        print(colored("\n        Tables in Databse: " + dbName, 'green'))
+        tableList = os.listdir("AllDatabase/" + dbName)
+        for table in tableList:
+            self.describeTable(table)

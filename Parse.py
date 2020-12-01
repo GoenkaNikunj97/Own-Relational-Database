@@ -306,6 +306,9 @@ class Parse:
         try:
             if "database" in self.query:
                 database_drop = re.compile(r'drop database\s*(.*)\s*',re.IGNORECASE).findall(self.query)
+                database=database_drop[0]
+                database=database.lstrip().rstrip()
+                self.queryProcessor.dropDb(database)
                 self.log.pushLog(self.query,"Successfully dropped database "+self.database)
             elif "table" in self.query:
                 if Parse.newDB:
@@ -330,13 +333,17 @@ class Parse:
 
     def describe(self):
         try:
+            if Parse.newDB:
+                self.queryProcessor.useDb(self.database)
+                Parse.newDB=False
             if "describe" in self.query.lower():
                 tableName=re.compile(r'describe\s*(.*).*',re.IGNORECASE).findall(self.query)
             elif "desc" in self.query.lower():
                 tableName=re.compile(r'desc\s*(.*).*',re.IGNORECASE).findall(self.query)
             table=tableName[0]
             table=table.lstrip().rstrip()
-            # self.log.pushLog(self.query,"Describe table "+table+" from database "+self.database)
+            self.queryProcessor.describeTable(table)
+            self.log.pushLog(self.query,"Describe table "+table+" from database "+self.database)
         except IndexError as e:
             print(e)
 

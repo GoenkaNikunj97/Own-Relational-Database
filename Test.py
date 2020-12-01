@@ -1,4 +1,6 @@
 import QueryProcessor as qp
+import time
+
 if __name__ == "__main__":
 
     #Make Object of Query Processor
@@ -56,7 +58,6 @@ if __name__ == "__main__":
         print(e)
     '''
     
-    
     #---------DELETE TABLE COMMAND-----------
     '''
     try:
@@ -82,28 +83,26 @@ if __name__ == "__main__":
     '''
 
     #---------INSERT TABLE COMMAND-----------
-    '''
+    
     try:
         #selecting DB, (run CREATE DB CODE FIRST)
-        queryProcessor.useDb("PersonDataBase")
+        queryProcessor.useDb("testdb")
 
-        tableName = "PERSONerw"
+        tableName = "testtable"
 
-        valueList = [999 , "sd", "dfsdf", "dfsdeefs", "fdssdfqw"]
-
-        valueList1 = [999 , "sd"]
-        colList = ["PersonID" , "FirstName"]
-
+        valueList = ["999" , "sd", "3.1"]
         print(" INSERT INTO table_name VALUES (value1, value2, value3, ...);")
         queryProcessor.insertQuery( tableName, valueList = valueList)
+        queryProcessor.selectQuery( tableName, columnListToDisplay=["*"] )
 
+        valueList1 = ["999" , "sd"]
+        colList = ["col1" , "col3"]
         print("INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);")
         queryProcessor.insertQuery( tableName, valueList=valueList1 ,colList=colList)
-
-        queryProcessor.selectQuery( tableName )
+        queryProcessor.selectQuery( tableName, columnListToDisplay=["*"] )
     except Exception as e:
         print(e)
-    '''
+    
 
     #---------SELECT TABLE COMMAND-----------
     '''
@@ -174,4 +173,49 @@ if __name__ == "__main__":
         print(e)
     ''' 
     
+    #-------------------------DROP DB COMMAND-----------------------
+    '''
+    try:
+        databasename = "PersonDataBase"
+        print("Create DATABASE PersonDataBase;")
+        #queryProcessor.createDB("PersonDataBase")
+
+        print("DROP DATABASE databasename;")
+        queryProcessor.dropDb(databasename)
+    except Exception as e:
+        print(e)
+    '''
+    #-------------------------TRANSACTION COMMAND-----------------------
+    try:
+        dbname = "abcd"
+        table = "nikunj"
+        
+        queryProcessor.startTransaction(dbname, table)
+        queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
+
+        time.sleep(10)
+        valueList = ["995439" , "sDFSGSd", "3.1"]
+        queryProcessor.insertQuery( table, valueList = valueList)
+        queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
+
+        time.sleep(2)
+        queryProcessor.setSavePoint("sav")
+        
+        valueList = ["954399" , "sd", "3.641"]
+        queryProcessor.insertQuery( table, valueList = valueList)
+        queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
+        
+        time.sleep(2)
+        valueList = ["9634299" , "sdRTE", "53.1"]
+        queryProcessor.insertQuery( table, valueList = valueList)
+        queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
+
+        time.sleep(2)
+        queryProcessor.rollback("sav")
+        queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
+        
+        time.sleep(2)
+        queryProcessor.commit()
     
+    except Exception as e:
+        print(e)

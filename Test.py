@@ -186,6 +186,7 @@ if __name__ == "__main__":
         print(e)
     '''
     #-------------------------TRANSACTION COMMAND-----------------------
+    '''
     try:
         dbname = "abcd"
         table = "nikunj"
@@ -193,29 +194,73 @@ if __name__ == "__main__":
         queryProcessor.startTransaction(dbname, table)
         queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
 
-        time.sleep(10)
+        time.sleep(3)
         valueList = ["995439" , "sDFSGSd", "3.1"]
         queryProcessor.insertQuery( table, valueList = valueList)
         queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
-
-        time.sleep(2)
-        queryProcessor.setSavePoint("sav")
-        
+      
         valueList = ["954399" , "sd", "3.641"]
         queryProcessor.insertQuery( table, valueList = valueList)
         queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
         
+        time.sleep(2)
+        queryProcessor.setSavePoint("sav")
         time.sleep(2)
         valueList = ["9634299" , "sdRTE", "53.1"]
         queryProcessor.insertQuery( table, valueList = valueList)
         queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
 
         time.sleep(2)
+        print("")
+        print("")
         queryProcessor.rollback("sav")
+        print("")
+        print("")
+        print("")
+        print("")
+        time.sleep(2)
         queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
+
+        print("")
+        print("")
+
+        valueList = ["954399" , "sd", "3.641"]
+        queryProcessor.insertQuery( table, valueList = valueList)
+        queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
+        table = "nikunj2"
+        time.sleep(2)
+        queryProcessor.setSavePoint("sav2")
+        time.sleep(2)
+        valueList = ["9634299" , "sdRTE", "53.1"]
+        queryProcessor.insertQuery( table, valueList = valueList)
+        queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
+
+        time.sleep(2)
+        print("")
+        print("")
+        queryProcessor.rollback("sav2")
+        print("")
+        print("")
+        print("")
+        print("")
+        time.sleep(2)
+        
+        table = "nikunj2"
+        queryProcessor.selectQuery( table, columnListToDisplay = ["*"])
+
+        print("")
+        print("")
         
         time.sleep(2)
-        queryProcessor.commit()
+        #queryProcessor.commit()
     
     except Exception as e:
         print(e)
+    '''
+
+
+    queryProcessor.useDb('abcd')
+    queryProcessor.describeTable("nikunj2")
+
+    time.sleep(20)
+    queryProcessor.describeDb('abcd')

@@ -13,12 +13,12 @@ select_column_RE=r'select\s(.*)\sfrom'
 select_table_condition_RE=r'from\s(.*)\swhere'
 select_table_no_condition_RE=r'from\s(.*)\s*'
 select_condition_column_RE=r'where\s(.*)[=|>|<|<=|>=]'
-select_condition_value_RE=r'(=|>|<|<=|>=)(.*)'
+select_condition_value_RE=r'(=|>|<|<=|>=)(.*).*'
 
 #delete
 delete_table_RE=r'from\s(.*)\swhere'
 delete_condition_column_RE=r'where\s(.*)[=|>|<|<>|<=|>=]'
-delete_condition_value_RE=r'(=|>|<|<=|>=)(.*)'
+delete_condition_value_RE=r'(=|>|<|<=|>=)(.*).*'
 
 #insert
 insert_table_RE=r'insert into\s*(.*)\s*\('

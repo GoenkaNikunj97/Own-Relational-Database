@@ -2,8 +2,11 @@ import constants
 import re
 import QueryProcessor as qp
 import Logging as logging
+import Transaction as trns
+
 
 class Parse:
+    transcationFlag=False
     log=logging.Logging()
     queryProcessor = qp.QueryProcessor()    
     def __init__(self,database, query):
@@ -44,10 +47,32 @@ class Parse:
             self.update()
         elif constants.drop in self.query.lower():
             self.drop()
+        elif "describe" in self.query.lower() or "desc" in self.query.lower():
+            self.describe()
+        elif "begin transaction" in self.query.lower():
+            Parse.transcationFlag=True
+            transaction=trns.Transaction()
+            transaction.beginTransaction()
         elif "quit" in self.query.lower():
             return 0
         elif "use" in self.query.lower():
             return
+        elif "commit" in self.query.lower():
+            if Parse.transcationFlag:
+                print("commited")
+                Parse.transcationFlag=False
+                return 0
+            else:
+                print("No transaction")
+                return
+        elif "rollback" in self.query.lower():
+            if Parse.transcationFlag:
+                print("rollback")
+                Parse.transcationFlag=False 
+                return 0
+            else:
+                print("No transaction")
+                return
         else:
             return -1
 
@@ -237,6 +262,19 @@ class Parse:
         except Exception as e:
             self.log.pushLog(self.query,str(e))
             print(e)
+
+    def describe(self):
+        try:
+            if "describe" in self.query.lower():
+                tableName=re.compile(r'describe\s*(.*).*',re.IGNORECASE).findall(self.query)
+            elif "desc" in self.query.lower():
+                tableName=re.compile(r'desc\s*(.*).*',re.IGNORECASE).findall(self.query)
+            table=tableName[0]
+            table=table.lstrip().rstrip()
+            # self.log.pushLog(self.query,"Describe table "+table+" from database "+self.database)
+        except IndexError as e:
+            print(e)
+
     def format(self,raw_columns):
         columns = raw_columns.split(",")
         return columns

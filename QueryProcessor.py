@@ -2,18 +2,15 @@ import os
 import json
 import shutil
 from termcolor import colored
-
 # User_defined Classes
 import DataType
 import Presentation
-
 
 class QueryProcessor:
     def __init__(self):
         self.databaseName = ""
         self.databaseDir = ""
         self.transaction = False
-
     # ==========================common methods used below===========================================
     def checkIfFilePathExist(self, dirName):
         if os.path.exists(dirName):
@@ -57,78 +54,7 @@ class QueryProcessor:
             f.truncate()
             json.dump(tableData, f)
 
-        # ============================== commands not afftected by transaction =========================================
-        def useDb(self, DBName):
-            dbDir = "AllDatabase/" + DBName
-            if (self.checkIfFilePathExist(dbDir)):
-                self.databaseName = DBName
-                self.databaseDir = "AllDatabase/" + self.databaseName + "/"
-                print(self.databaseName, " Selected")
-            else:
-                raise Exception("Database " + DBName + " Does Not Exist")
-
-        def createDB(self, DBName):
-            dbDir = "AllDatabase/" + DBName
-            if (self.checkIfFilePathExist(dbDir)):
-                raise Exception("Database already Exist")
-            else:
-                print(DBName, " Created")
-                os.makedirs(dbDir)
-                self.useDb(DBName)
-
-        def dropDb(self, databaseName):
-            databaseDir = "AllDatabase/" + databaseName
-            if (self.checkIfFilePathExist(databaseDir)):
-                shutil.rmtree(databaseDir)
-                print(databaseName + " Database droped")
-            else:
-                raise Exception("Database does not exist " + databaseName)
-
-        def createTable(self, tableName, columnDict, primaryKeyList, foreignKeyList=[]):
-            if (self.databaseName == ""):
-                raise Exception("Select Database first")
-            else:
-                tableName = tableName.rstrip().lstrip()
-                tableDir = self.databaseDir + tableName + "/"
-                tableMetadatFilePath = tableDir + tableName + "_metadata.json"
-                tableDataFilePath = tableDir + tableName + "_data.json"
-
-                if self.checkIfFilePathExist(tableDir):
-                    raise Exception("table already Exist")
-                else:
-                    os.makedirs(tableDir)
-
-                tabelMatadata = dict()
-                tabelMatadata["table_name"] = tableName
-
-                column = dict()
-                for key in columnDict.keys():
-                    columnInputType = DataType.getPythonBasedDataType(columnDict[key])
-                    column[key] = columnInputType
-
-                tabelMatadata["columns"] = column
-                tabelMatadata["primary_key"] = primaryKeyList
-                tabelMatadata["foreign_key"] = foreignKeyList
-                tabelMatadata = json.dumps(tabelMatadata)
-
-                with open(tableMetadatFilePath, 'w') as f:
-                    f.truncate()
-                    f.write(tabelMatadata)
-
-                with open(tableDataFilePath, 'w') as f:
-                    f.truncate()
-                    f.write("[]")
-
-                print(tableName + " Table Created")
-
-        def dropTable(self, tableName):
-            tableDir = self.databaseDir + tableName + "/"
-            if (self.checkIfFilePathExist(tableDir)):
-                shutil.rmtree(tableDir)
-                print(tableName + " table dropped")
-            else:
-                raise Exception("Wrong Table Name")
-
+    # ============================== commands not afftected by transaction =========================================
     def useDb(self, DBName):
         dbDir = "AllDatabase/" + DBName
         if (self.checkIfFilePathExist(dbDir)):
@@ -138,6 +64,71 @@ class QueryProcessor:
         else:
             raise Exception("Database " + DBName + " Does Not Exist")
 
+    def createDB(self, DBName):
+        dbDir = "AllDatabase/" + DBName
+        if (self.checkIfFilePathExist(dbDir)):
+            raise Exception("Database already Exist")
+        else:
+            print(DBName, " Created")
+            os.makedirs(dbDir)
+            self.useDb(DBName)
+
+    def dropDb(self, databaseName):
+        databaseDir = "AllDatabase/" + databaseName
+        if (self.checkIfFilePathExist(databaseDir)):
+            shutil.rmtree(databaseDir)
+            print(databaseName + " Database droped")
+        else:
+            raise Exception("Database does not exist " + databaseName)
+
+    def createTable(self, tableName, columnDict, primaryKeyList, foreignKeyList=[]):
+        if (self.databaseName == ""):
+            raise Exception("Select Database first")
+        else:
+            tableName = tableName.rstrip().lstrip()
+            tableDir = self.databaseDir + tableName + "/"
+            tableMetadatFilePath = tableDir + tableName + "_metadata.json"
+            tableDataFilePath = tableDir + tableName + "_data.json"
+
+            if self.checkIfFilePathExist(tableDir):
+                raise Exception("table already Exist")
+            else:
+                os.makedirs(tableDir)
+            tabelMatadata = dict()
+            tabelMatadata["table_name"] = tableName
+            column = dict()
+            for key in columnDict.keys():
+                columnInputType = DataType.getPythonBasedDataType(columnDict[key])
+                column[key] = columnInputType
+
+            tabelMatadata["columns"] = column
+            tabelMatadata["primary_key"] = primaryKeyList
+            tabelMatadata["foreign_key"] = foreignKeyList
+            tabelMatadata = json.dumps(tabelMatadata)
+            with open(tableMetadatFilePath, 'w') as f:
+                f.truncate()
+                f.write(tabelMatadata)
+            with open(tableDataFilePath, 'w') as f:
+                f.truncate()
+                f.write("[]")
+            print(tableName + " Table Created")
+
+    def dropTable(self, tableName):
+        tableDir = self.databaseDir + tableName + "/"
+        if (self.checkIfFilePathExist(tableDir)):
+            shutil.rmtree(tableDir)
+            print(tableName + " table dropped")
+        else:
+            raise Exception("Wrong Table Name")
+
+    def useDb(self, DBName):
+        dbDir = "AllDatabase/" + DBName
+        if (self.checkIfFilePathExist(dbDir)):
+            self.databaseName = DBName
+            self.databaseDir = "AllDatabase/" + self.databaseName + "/"
+            print(self.databaseName, " Selected")
+        else:
+            raise Exception("Database " + DBName + " Does Not Exist")
     # ================================== Transaction COMMANDS ====================================================
     def startTransaction(self, DbName, tableName):
         self.transaction = True

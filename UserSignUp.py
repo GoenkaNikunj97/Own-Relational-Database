@@ -1,6 +1,11 @@
 import json
 import os
+import base64
 
+
+def encodingPassword(password):
+    encrpyt_password = base64.b64encode(bytes(password, 'utf-8'))
+    return encrpyt_password
 
 class UserSignUp:
     def __init__(self, userId, password):
@@ -19,7 +24,8 @@ class UserSignUp:
             f.write("[]")
             f.close()
 
-        new_entry = {'userID': self.userId, 'password': self.password}
+        encrypted_password = encodingPassword(self.password)
+        new_entry = {'userID': self.userId, 'password': str(encrypted_password)}
         with open(self.credentialsFileFullPath, "r+") as file:
             credentialsData = json.load(file)
             if len(credentialsData) > 0:

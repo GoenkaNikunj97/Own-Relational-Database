@@ -1,0 +1,26 @@
+[
+    {
+        "userId": "souvik",
+        "loginTimestamp": "01-Dec-2020 (17:58:54.991008)",
+        "queries": [
+            {
+                "Query": "Select * from Person;",
+                "TimeStamp": "01-Dec-2020 (17:59:04.472944)"
+            },
+            {
+                "Query": "quit",
+                "TimeStamp": "01-Dec-2020 (17:59:15.626263)"
+            }
+        ]
+    },
+    {
+        "userId": "malav",
+        "loginTimestamp": "01-Dec-2020 (17:59:25.960174)",
+        "queries": [
+            {
+                "Query": "quit",
+                "TimeStamp": "01-Dec-2020 (17:59:30.054758)"
+            }
+        ]
+    }
+]

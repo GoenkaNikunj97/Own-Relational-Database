@@ -1,7 +1,10 @@
+import base64
 import json
 import os
 
-
+def decodingPassword(password):
+    decrpyt_password = base64.b64encode(bytes(password, 'utf-8'))
+    return decrpyt_password
 class UserLogin:
     def __init__(self, userId, password):
         self.userId = userId
@@ -22,7 +25,7 @@ class UserLogin:
                     for entry in credentialsData:
                         if entry["userID"] == self.userId:
                             user_found = True
-                            if entry["password"] == self.password:
+                            if entry["password"] == str(decodingPassword(self.password)):
                                 pass_matched = True
                             else:
                                 pass_matched = False

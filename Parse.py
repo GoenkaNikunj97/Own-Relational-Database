@@ -82,6 +82,8 @@ class Parse:
             if Parse.transcationFlag:
                 check=self.rollback()
                 if check==0:
+                    Parse.transcationFlag=False 
+                    self.count=0
                     return 0
                 elif check==1:
                     return
@@ -175,9 +177,8 @@ class Parse:
                     if self.count==0:
                         self.count+=1
                         self.queryProcessor.startTransaction(self.database,table)
-                    elif self.count >=1:
-                        self.queryProcessor.deleteQuery(table, condition)
-                        self.log.pushLog(self.query,"Data deleted from table "+table+" of database " +self.database)
+                self.queryProcessor.deleteQuery(table, condition)
+                self.log.pushLog(self.query,"Data deleted from table "+table+" of database " +self.database)
             elif constants.where_clause not in self.query:
                 tableName= re.compile(r'from\s(.*)\s*',re.IGNORECASE).findall(self.query)
                 table=tableName[0]
@@ -186,9 +187,8 @@ class Parse:
                     if self.count==0:
                         self.count+=1
                         self.queryProcessor.startTransaction(self.database,table)
-                    elif self.count >=1:
-                        self.queryProcessor.deleteQuery(table)
-                        self.log.pushLog(self.query,"Data successfully deleted from table "+table+" of database " +self.database)
+                self.queryProcessor.deleteQuery(table)
+                self.log.pushLog(self.query,"Data successfully deleted from table "+table+" of database " +self.database)
         except IndexError as e:
             self.log.pushLog(self.query,"Error in select query syntax")
             print("Error in Query Syntax")
@@ -277,9 +277,9 @@ class Parse:
             val_list=re.split('=|,',val)
             update_values={}
             for x in range(0,len(val_list),2):
-                column=val_list[x]
-                clm_value=val_list[x+1]
-                update_values[column]=clm_value            
+                column=val_list[x].lstrip().rstrip()
+                clm_value=val_list[x+1].lstrip().rstrip()
+                update_values[column]=clm_value.lstrip().rstrip()          
             #condition  
             condition_str=self.query[self.query.find('where'):]
             condition_column=re.compile(r'where\s*(.*)[=|>|<|<=|>=]\s*',re.IGNORECASE).findall(condition_str)
@@ -292,9 +292,8 @@ class Parse:
                 if self.count==0:
                     self.count+=1
                     self.queryProcessor.startTransaction(self.database,table)
-                elif self.count >=1:
-                    self.queryProcessor.updateQuery(table,update_values,condition)
-                    self.log.pushLog(self.query,"Data successfully update in table "+table+" from database "+self.database)
+            self.queryProcessor.updateQuery(table,update_values,condition)
+            self.log.pushLog(self.query,"Data successfully update in table "+table+" from database "+self.database)
         except IndexError as e:
             self.log.pushLog(self.query,"Error in select query syntax")
             print("Error in Query Syntax")   
@@ -355,7 +354,7 @@ class Parse:
     def formatCondition(self, column, condition_data):
         condition_op = condition_data[0][0]
         condition_val = condition_data[0][1]
-        return {"columnName": column[0], "operator": condition_op, "value": condition_val}
+        return {"columnName": column[0].lstrip().rstrip(), "operator": condition_op.lstrip().rstrip(), "value": condition_val.lstrip().rstrip()}
 
     def beginTransaction(self):
 
@@ -378,7 +377,6 @@ class Parse:
             self.query=self.query.replace(";","")
             self.query=self.query.strip()
             check=self.query.split()
-            print(check)
             if len(check)>2:
                 savepoint=re.compile(r'rollback to\s(.*).*',re.IGNORECASE).findall(self.query)
                 savePointName=savepoint[0]

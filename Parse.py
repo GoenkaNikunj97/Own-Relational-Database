@@ -4,12 +4,11 @@ import QueryProcessor as qp
 import Logging as logging
 import Transaction as trns
 
-
 class Parse:
     transcationFlag=False
-    log=logging.Logging()
-    queryProcessor = qp.QueryProcessor()    
-    def __init__(self,database, query):
+    log=logging.Logging()    
+    def __init__(self,database, query,queryProcessor):
+        self.queryProcessor=queryProcessor
         database=database.replace(";","")
         database=database.strip()
         self.database=database.lower()

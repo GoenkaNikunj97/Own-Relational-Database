@@ -36,6 +36,7 @@ def main():
     # userLoginSignUp()
     query = ""
     database=""
+    queryProcessor=qp.QueryProcessor()
 
     while not query.lower() == "quit":
         query=input(constants.InputQuery)
@@ -45,7 +46,7 @@ def main():
             query=input()
         else:
             database
-        query_type = Parse.Parse(database,query)
+        query_type = Parse.Parse(database,query,queryProcessor)
         val = query_type.check_query()
         print("\n#####################################################")
         if val == -1:

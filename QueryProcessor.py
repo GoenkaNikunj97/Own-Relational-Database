@@ -218,13 +218,10 @@ class QueryProcessor:
             self.tableDataList = self.tableDataList[:1]
             print("rolled back to orignal file")
         elif savePoint in self.savePointDict.keys():
-            print(self.tableDataList[:self.savePointDict[savePoint]])
-            print(len(self.tableDataList))
-            data = self.tableDataList[:self.savePointDict[savePoint]]
-            print(len(data),"dddddddddddddddddddddddd")
-            self.tableDataList = self.tableDataList[:self.savePointDict[savePoint]]
-            print(len(self.tableDataList))
-            print("rollbacked to save point "+ savePoint)
+            #rollback to save point
+            while len(self.tableDataList) > self.savePointDict[savePoint] + 1:
+                self.tableDataList.pop()
+            print("Rolled back to :"+ savePoint)
         else:
             raise Exception ("No such savepoint present")
 
@@ -241,8 +238,10 @@ class QueryProcessor:
     # ============================== commands afftected by transaction =========================================
     def selectQuery(self, tableName, columnListToDisplay=[], condition={}):
         if self.isTransaction():
-            tableData = self.tableDataList[-1]
-            tableName = self.tableName
+            if(tableName == self.tableName):
+                tableData = self.tableDataList[-1].copy()
+            else:
+                raise Exception ("transaction have lock on table "+self.tableName+ " Commit or rollback to start new transaction" )
         else:
             tableData = self.getDataFromTable(tableName)
         if (len(tableData) == 0):
@@ -301,8 +300,11 @@ class QueryProcessor:
 
     def deleteQuery(self, tableName, condition=[]):
         if self.isTransaction():
-            tableData = self.tableDataList[-1]
-            tableName = self.tableName
+            if (tableName == self.tableName):
+                tableData = self.tableDataList[-1].copy()
+            else:
+                raise Exception(
+                    "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
         if (len(tableData) == 0):
@@ -365,8 +367,11 @@ class QueryProcessor:
 
     def insertQuery(self, tableName, valueList, colList=[]):
         if self.isTransaction():
-            tableData = self.tableDataList[-1]
-            tableName = self.tableName
+            if (tableName == self.tableName):
+                tableData = self.tableDataList[-1].copy()
+            else:
+                raise Exception(
+                    "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
         tableDir = self.databaseDir + tableName + "/"
@@ -449,8 +454,11 @@ class QueryProcessor:
 
     def updateQuery(self, tableName, colList, condition):
         if self.isTransaction():
-            tableData = self.tableDataList[-1]
-            tableName = self.tableName
+            if (tableName == self.tableName):
+                tableData = self.tableDataList[-1].copy()
+            else:
+                raise Exception(
+                    "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
 

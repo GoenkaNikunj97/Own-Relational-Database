@@ -124,6 +124,416 @@
             "Execution Time": "2020-12-01 18:29:47",
             "query": "update table1 set id=3 where name = souvik",
             "message": "id should be of type <class 'int'>"
+        },
+        {
+            "Execution Time": "2020-12-01 18:45:31",
+            "query": "update table1 set name=jani where id=1",
+            "message": "Data successfully update in table table1 from database database"
+        },
+        {
+            "Execution Time": "2020-12-01 18:45:58",
+            "query": "update table1 set id=1 where id=nikunj",
+            "message": "Data successfully update in table table1 from database database"
+        },
+        {
+            "Execution Time": "2020-12-01 18:46:12",
+            "query": "update table1 set id=1 where name=nikunj",
+            "message": "id should be of type <class 'int'>"
+        },
+        {
+            "Execution Time": "2020-12-01 18:46:21",
+            "query": "update table1 set name=jani where id=1",
+            "message": "Data successfully update in table table1 from database database"
+        },
+        {
+            "Execution Time": "2020-12-01 18:48:27",
+            "query": "update table1 set id=1 where name=nikunj",
+            "message": "id should be of type <class 'int'>"
+        },
+        {
+            "Execution Time": "2020-12-01 18:48:51",
+            "query": "update table1 set name=jani where id=1",
+            "message": "Data successfully update in table table1 from database database"
+        },
+        {
+            "Execution Time": "2020-12-01 18:53:59",
+            "query": "select * from demotable",
+            "message": "Selected demotable from  database demo"
+        },
+        {
+            "Execution Time": "2020-12-01 18:56:52",
+            "query": "create database db",
+            "message": "Successfully created database "
+        },
+        {
+            "Execution Time": "2020-12-01 18:57:30",
+            "query": "create table table1 (id int,name varchar,city varchar)",
+            "message": "Successfully created table table1 from database db"
+        },
+        {
+            "Execution Time": "2020-12-01 18:58:15",
+            "query": "create table table1 (id int,name varchar,city varchar)",
+            "message": "table already Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 18:58:57",
+            "query": "insert into table1 (id,name,city) values (1,malav,halifax)",
+            "message": "Data successfully inserted into table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 18:59:15",
+            "query": "insert into table1 (id,name,city) values (2,nikunj,toronto)",
+            "message": "Data successfully inserted into table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 18:59:44",
+            "query": "insert into table1 (id,name,city) values (3,souvik,paris)",
+            "message": "Data successfully inserted into table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 18:59:59",
+            "query": "insert into table1 (id,name,city) values (3,souvik,p",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-01 19:00:28",
+            "query": "insert into table1 (id,name,city) values (abc,test,paris)",
+            "message": "id should be of type <class 'int'>"
+        },
+        {
+            "Execution Time": "2020-12-01 19:00:52",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:01:08",
+            "query": "select id,name from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:01:29",
+            "query": "select id,name from table1 where id=1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:01:43",
+            "query": "select id,name from table1 where id>2",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:01:47",
+            "query": "select id,name from table1 where id<2",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:02:04",
+            "query": "select * from table where id=1",
+            "message": "table Table does not Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 19:02:21",
+            "query": "select * from table1 where id=1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:02:58",
+            "query": "update table1 set name=root where id=1",
+            "message": "Data successfully update in table table1 from database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:03:05",
+            "query": "select * from table1 where id=1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:05:02",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:05:57",
+            "query": "insert into table1 (id,name,city) values (4,transUser,name)",
+            "message": "Data successfully inserted into table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:05:59",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:06:36",
+            "query": "insert into table1 (id,name,city) values (5,anotherUser,city123)",
+            "message": "Data successfully inserted into table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:06:38",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:06:50",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:08:15",
+            "query": "begin transaction",
+            "message": "Database not selected"
+        },
+        {
+            "Execution Time": "2020-12-01 19:08:49",
+            "query": "select * from table1",
+            "message": "Database database Does Not Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 19:09:37",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:10:05",
+            "query": "insert into table1 (id,name,city) values (4,transUser,name)",
+            "message": "Data successfully inserted into table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:10:07",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:10:50",
+            "query": "insert into table1 (id,name,city) values (4,transUser,name2)",
+            "message": "Data successfully inserted into table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:10:54",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:11:07",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:13:28",
+            "query": "describe table1",
+            "message": "Describe table table1 from database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:14:31",
+            "query": "drop table demotable",
+            "message": "Successfully dropped table demotable from database demo"
+        },
+        {
+            "Execution Time": "2020-12-01 19:14:59",
+            "query": "drop database demo",
+            "message": "Successfully dropped database demo"
+        },
+        {
+            "Execution Time": "2020-12-01 19:15:30",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:15:57",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:17:22",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:18:22",
+            "query": "insert into table1 (id,name,city) values (5,anotheruser,city123)",
+            "message": "Data successfully inserted into table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:18:30",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:19:00",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:33:50",
+            "query": "select * from table1",
+            "message": "Database not selected"
+        },
+        {
+            "Execution Time": "2020-12-01 19:46:14",
+            "query": "select abc from table1",
+            "message": "'abc'"
+        },
+        {
+            "Execution Time": "2020-12-01 19:46:26",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:46:34",
+            "query": "select * table1",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-01 19:47:14",
+            "query": "describe table1",
+            "message": "Describe table table1 from database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:47:46",
+            "query": "select * table1",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-01 19:47:48",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:48:18",
+            "query": "select id,city from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:48:48",
+            "query": "select * from table",
+            "message": "table Table does not Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 19:48:55",
+            "query": "select * from emp",
+            "message": "emp Table does not Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 19:49:21",
+            "query": "create database db",
+            "message": "Database already Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 19:49:53",
+            "query": "create table table1",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-01 19:50:04",
+            "query": "create table table1",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-01 19:50:34",
+            "query": "insert into",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-01 19:53:08",
+            "query": "insert into table1 (id,name) values (6,name132)",
+            "message": "Data successfully inserted into table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 19:53:12",
+            "query": "select * from emp",
+            "message": "emp Table does not Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 19:53:18",
+            "query": "select * from table1",
+            "message": "Selected table1 from  database db"
+        },
+        {
+            "Execution Time": "2020-12-01 20:00:33",
+            "query": "delete from table1",
+            "message": "Data successfully deleted from table table1 of database db"
+        },
+        {
+            "Execution Time": "2020-12-01 20:08:28",
+            "query": "select * from table2",
+            "message": "table2 Table does not Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 20:10:02",
+            "query": "create database db",
+            "message": "Database already Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 20:12:13",
+            "query": "create table table1 (col int,col2 varchar)",
+            "message": "table already Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 20:13:47",
+            "query": "create table table1 (col int,col2)",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-01 20:14:12",
+            "query": "create table table1 (col int,col2 xyz)",
+            "message": "table already Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 20:14:25",
+            "query": "create table table2 (col int,col2 xyz)",
+            "message": "Successfully created table table2 from database db"
+        },
+        {
+            "Execution Time": "2020-12-01 20:15:30",
+            "query": "insert into table1 (id,name,city) values (a,b,c)",
+            "message": "id should be of type <class 'int'>"
+        },
+        {
+            "Execution Time": "2020-12-01 20:16:02",
+            "query": "insert into table2 (id,name,city) values (a,b,c)",
+            "message": "table2 Table does not Exist"
+        },
+        {
+            "Execution Time": "2020-12-01 20:16:47",
+            "query": "insert into table1 (id,name,city) values (a,b,c)",
+            "message": "Database not selected"
+        },
+        {
+            "Execution Time": "2020-12-01 20:17:20",
+            "query": "insert into table1 (id,name,city) values (a,b,c)",
+            "message": "id should be of type <class 'int'>"
+        },
+        {
+            "Execution Time": "2020-12-01 20:17:51",
+            "query": "update table1",
+            "message": "Database not selected"
+        },
+        {
+            "Execution Time": "2020-12-01 20:18:01",
+            "query": "update table1 set id=1 where name=malav",
+            "message": "Database not selected"
+        },
+        {
+            "Execution Time": "2020-12-01 20:18:51",
+            "query": "delete from table1",
+            "message": "Database not selected"
+        },
+        {
+            "Execution Time": "2020-12-01 20:19:56",
+            "query": "drop table table1",
+            "message": "Database Not Selected"
+        },
+        {
+            "Execution Time": "2020-12-01 20:22:09",
+            "query": "begin transaction",
+            "message": "Database not selected"
+        },
+        {
+            "Execution Time": "2020-12-01 20:23:19",
+            "query": "update table1 set name=5 where id",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-01 20:24:14",
+            "query": "update table2 set name=malav where id=2",
+            "message": "table2 Table does not Exist"
         }
     ]
 }

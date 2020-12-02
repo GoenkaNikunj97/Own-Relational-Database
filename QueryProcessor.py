@@ -379,10 +379,19 @@ class QueryProcessor:
     def updateRow(self, tableData, i, colList, metaData):
         for key in colList.keys():
             if key in tableData[i].keys():
-                if (type(colList[key]) == type(self.getValueType(metaData[key]))):
-                    tableData[i][key] = colList[key]
+                if type(self.getValueType(metaData[key])) != type("str"):
+                    try:
+                        dataInNeededFormat = self.getDataInRequiredFormat(colList[key])
+                    except:
+                        raise Exception(str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
+                    if (type(dataInNeededFormat) == type(self.getValueType(metaData[key]))):
+                        if (type(colList[key]) == type(self.getValueType(metaData[key]))):
+                            tableData[i][key] = dataInNeededFormat
+                        else:
+                            raise Exception(str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
                 else:
-                    raise Exception(str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
+                # its in str format so just put it in
+                    tableData[i][key] = colList[key]
             else:
                 raise Exception(key + " not present in table")
 

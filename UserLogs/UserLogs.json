@@ -4,7 +4,7 @@
         "loginTimestamp": "01-Dec-2020 (17:58:54.991008)",
         "queries": [
             {
-                "Query": "Select * from Person;",
+                "Query": "Select * from table1;",
                 "TimeStamp": "01-Dec-2020 (17:59:04.472944)"
             },
             {

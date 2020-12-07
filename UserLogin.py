@@ -18,6 +18,7 @@ class UserLogin:
         self.missingDirectory = "Sorry you are not registered. Kindly register"
         self.login_status = False
         self.timeStamp = None
+        self.userLogsDir = "UserLogs/UserLogs.json"
 
     def check(self):
 
@@ -40,22 +41,37 @@ class UserLogin:
                                 print("#####################################################\n")
                                 self.timeStamp = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
                                 self.login_status = True
+
+                                user_logs = {'userId': self.userId, 'loginTimestamp':self.timeStamp}
+
+                                if not os.path.exists(self.userLogsDir):
+                                    f = open(self.userLogsDir, "w")
+                                    f.write("[]")
+                                    f.close()
+
+                                with open(self.userLogsDir, "r+") as file:
+                                    userLogsData = json.load(file)
+                                    if len(userLogsData) > 0:
+                                        print("\nUser Log registered\n")
+                                        userLogsData.append(user_logs)
+                                        file.seek(0)
+                                        json.dump(userLogsData, file)
+                                    else:
+                                        print("\nUser Log registered successfully\n")
+                                        userLogsData.append(user_logs)
+                                        file.seek(0)
+                                        json.dump(userLogsData, file)
                                 break
                             elif user_found:
                                 print("\nSorry password is incorrect!!! Re-enter credentials\n")
-                                exit(0)
                                 break
                         else:
                             user_found = False
                     if not user_found:
                         print("\nSorry no information found!!! Kindly register\n")
-                        exit(0)
                         self.login_status = False
                 else:
                     print("\nSorry no information found\n")
                     self.login_status = False
         else:
             print(self.missingDirectory)
-
-    def logs(self):
-        return self.userId + "," + self.timeStamp

@@ -83,7 +83,7 @@ if __name__ == "__main__":
     '''
 
     #---------INSERT TABLE COMMAND-----------
-    
+    '''
     try:
         #selecting DB, (run CREATE DB CODE FIRST)
         queryProcessor.useDb("testdb")
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         queryProcessor.selectQuery( tableName, columnListToDisplay=["*"] )
     except Exception as e:
         print(e)
-    
+    '''
 
     #---------SELECT TABLE COMMAND-----------
     '''
@@ -258,9 +258,20 @@ if __name__ == "__main__":
         print(e)
     '''
 
+    try:
+        # selecting DB, (run CREATE DB CODE FIRST)
+        queryProcessor.useDb("nikunjdb")
 
-    queryProcessor.useDb('abcd')
-    queryProcessor.describeTable("nikunj2")
+        tableName = "nikunj_table"
 
-    time.sleep(20)
-    queryProcessor.describeDb('abcd')
+        condition = {
+            "columnName": "PersonID",
+            "operator": ">",
+            "value": "2"
+        }
+
+        print("DELETE FROM table_name WHERE condition")
+        queryProcessor.deleteQuery(tableName, condition)
+
+    except Exception as e:
+        print(e)

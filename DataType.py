@@ -1,5 +1,5 @@
 ALL_DATA_TYPES = {
-    "str": ["char", "varchar", "varbinary", "tinyBlob", "text", "longText"],
+    "str": ["char", "varchar", "varbinary", "tinyBlob", "text", "longText","str"],
     "int": ["smallint", "int", "mediumint", "integer", "bigint"],
     "float": ["float", "double", "decimal"]
 }

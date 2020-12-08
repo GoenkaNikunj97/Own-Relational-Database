@@ -5,12 +5,14 @@ from termcolor import colored
 # User_defined Classes
 import DataType
 import Presentation
+import LockingMechanismChecker as l
 
 class QueryProcessor:
     def __init__(self):
         self.databaseName = ""
         self.databaseDir = ""
         self.transaction = False
+        self.locker = l.LockingMechanismChecker()
     # ==========================common methods used below===========================================
     def checkIfFilePathExist(self, dirName):
         if os.path.exists(dirName):
@@ -121,17 +123,59 @@ class QueryProcessor:
         else:
             raise Exception("Wrong Table Name")
 
- 
+    def dump(self, dbName):
+        dbDir = "AllDatabase/" + dbName
+        if (self.checkIfFilePathExist(dbDir)):
+            databaseDir = "AllDatabase/" + dbName + "/"
+            tableList = os.listdir("AllDatabase/" + dbName)
+            queryList = ""
+            for table in tableList:
+                query = "CREATE TABLE " + table + " ( "
+
+                tableDir = databaseDir + table + "/"
+                tableDataFilePath = tableDir + table + "_metadata.json"
+
+                metaData = ""
+
+                with open(tableDataFilePath) as file:
+                    metaData = json.load(file)
+
+                for key in metaData["columns"]:
+                    query = query + key + " " + metaData["columns"][key] + ","
+
+                query = query.rstrip(query[-1])
+                query = query + " );"
+                queryList = queryList + query + "\n"
+
+            sqlFolder = "sql"
+            if (self.checkIfFilePathExist(sqlFolder)):
+                pass
+            else:
+                os.makedirs("sql")
+            dumpLocation = "sql/" + dbName + ".txt"
+            with open(dumpLocation, 'w') as f:
+                f.truncate()
+                f.write(queryList)
+
+            print("SQL Dump Created at location: "+dumpLocation )
+        else:
+            raise Exception("Database " + dbName + " Does Not Exist")
+
     # ================================== Transaction COMMANDS ====================================================
     def startTransaction(self, DbName, tableName):
-        self.transaction = True
-        self.tableName = tableName
-        self.tableDataList = list()
-        self.savePointDict = dict()  # { 'name': index, }
-        self.useDb(DbName)
-        self.tableDataPath = "AllDatabase/" + DbName + tableName + "_data.json"
-        self.tableDataList.append(self.getDataFromTable(tableName))
-        print("transaction started")
+        if(self.locker.checkLock(tableName,DbName)):
+            raise Exception ("Other User have lock on this table")
+        else:
+            self.locker.addLock(tableName, DbName)
+            self.transaction = True
+            self.tableName = tableName
+            self.databaseName = DbName
+            self.tableDataList = list()
+            self.savePointDict = dict()  # { 'name': index, }
+            self.useDb(DbName)
+            self.tableDataPath = "AllDatabase/" + DbName + tableName + "_data.json"
+            self.tableDataList.append(self.getDataFromTable(tableName))
+            print("transaction started")
 
     def setSavePoint(self, name):
         self.savePointDict[name] = len(self.tableDataList) - 1
@@ -141,6 +185,7 @@ class QueryProcessor:
         if savePoint == "":
             self.tableDataList = self.tableDataList[:1]
             print("rolled back to orignal file")
+            self.locker.removeLock(self.tableName, self.databaseName)
             self.transaction=False
         elif savePoint in self.savePointDict.keys():
             # rollback to save point
@@ -156,13 +201,12 @@ class QueryProcessor:
         self.saveDataToTable(tableName, tableData)
         print("Data Saved to db")
         self.transaction = False
+        self.locker.removeLock(self.tableName , self.databaseName)
 
     def isTransaction(self):
         return self.transaction
 
         # ========================================query that dont use Transactions====================================
-
-
 
     # ============================== commands afftected by transaction =========================================
     def selectQuery(self, tableName, columnListToDisplay=[], condition={}):
@@ -237,8 +281,14 @@ class QueryProcessor:
                     "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
+            if(self.locker.checkLock(tableName,self.databaseName)):
+                raise Exception("This table is locked by other user")
+            else:
+                self.locker.addLock(tableName,self.databaseName)
+
         if (len(tableData) == 0):
             print(tableName + " Table is Empty")
+            self.locker.removeLock(tableName, self.databaseName)
             return
         if (len(condition) > 0):
             dataLength = len(tableData)
@@ -294,6 +344,7 @@ class QueryProcessor:
                     json.dump(tableData, f)
                 else:
                     f.write("[]")
+            self.locker.removeLock(tableName,self.databaseName)
 
     def insertQuery(self, tableName, valueList, colList=[]):
         if self.isTransaction():
@@ -304,6 +355,11 @@ class QueryProcessor:
                     "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
+            if (self.locker.checkLock(tableName, self.databaseName)):
+                raise Exception("This table is locked by other user")
+            else:
+                self.locker.addLock(tableName, self.databaseName)
+
         tableDir = self.databaseDir + tableName + "/"
         tableDataFilePath = tableDir + tableName + "_metadata.json"
         metaData = ""
@@ -319,11 +375,13 @@ class QueryProcessor:
                         try:
                             dataInNeededFormat = self.getDataInRequiredFormat(valueList[i])
                         except:
+                            self.locker.removeLock(tableName, self.databaseName)
                             raise Exception(
                                 str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
                         if (type(dataInNeededFormat) == type(self.getValueType(metaData[key]))):
                             dataRow[key] = dataInNeededFormat
                         else:
+                            self.locker.removeLock(tableName, self.databaseName)
                             raise Exception(
                                 str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
                     else:
@@ -334,6 +392,7 @@ class QueryProcessor:
                 tableData.append(dataRow)
                 print("data added")
             else:
+                self.locker.removeLock(tableName, self.databaseName)
                 raise Exception(tableName + " have " + str(len(metaData)) + " columns but " + str(
                     len(valueList)) + " values was given")
         else:
@@ -346,11 +405,13 @@ class QueryProcessor:
                         try:
                             dataInNeededFormat = self.getDataInRequiredFormat(valueList[i])
                         except:
+                            self.locker.removeLock(tableName, self.databaseName)
                             raise Exception(
                                 str(col) + " should be of type " + str(type(self.getValueType(metaData[col]))))
                         if (type(dataInNeededFormat) == type(self.getValueType(metaData[col]))):
                             dataRow[col] = dataInNeededFormat
                         else:
+                            self.locker.removeLock(tableName, self.databaseName)
                             raise Exception(
                                 str(col) + " should be of type " + str(type(self.getValueType(metaData[col]))))
                     else:
@@ -372,27 +433,31 @@ class QueryProcessor:
             with open(tableDataFilePath, 'w') as f:
                 f.truncate()
                 json.dump(tableData, f)
+            self.locker.removeLock(tableName, self.databaseName)
 
         return metaData
 
     # method made just of Update query
-    def updateRow(self, tableData, i, colList, metaData):
+    def updateRow(self, tableName,tableData, i, colList, metaData):
         for key in colList.keys():
             if key in tableData[i].keys():
                 if type(self.getValueType(metaData[key])) != type("str"):
                     try:
                         dataInNeededFormat = self.getDataInRequiredFormat(colList[key])
                     except:
+                        self.locker.removeLock(tableName, self.databaseName)
                         raise Exception(str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
                     if (type(dataInNeededFormat) == type(self.getValueType(metaData[key]))):
                         if (type(colList[key]) == type(self.getValueType(metaData[key]))):
                             tableData[i][key] = dataInNeededFormat
                         else:
+                            self.locker.removeLock(tableName, self.databaseName)
                             raise Exception(str(key) + " should be of type " + str(type(self.getValueType(metaData[key]))))
                 else:
                 # its in str format so just put it in
                     tableData[i][key] = colList[key]
             else:
+                self.locker.removeLock(tableName, self.databaseName)
                 raise Exception(key + " not present in table")
 
     def updateQuery(self, tableName, colList, condition):
@@ -404,6 +469,10 @@ class QueryProcessor:
                     "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableData = self.getDataFromTable(tableName)
+            if (self.locker.checkLock(tableName, self.databaseName)):
+                raise Exception("This table is locked by other user")
+            else:
+                self.locker.addLock(tableName, self.databaseName)
 
         tableDir = self.databaseDir + tableName + "/"
         tableDataFilePath = tableDir + tableName + "_metadata.json"
@@ -413,6 +482,7 @@ class QueryProcessor:
         metaData = metaData["columns"]
 
         if (len(tableData) == 0):
+            self.locker.removeLock(tableName, self.databaseName)
             print(tableName + " Table is Empty")
             return
         else:
@@ -427,22 +497,22 @@ class QueryProcessor:
                     if (colToCheck in row.keys()):
                         if operator == "=":
                             if (str(row[colToCheck]) == (valueToCheck)):
-                                self.updateRow(tableData, i, colList, metaData)
+                                self.updateRow(tableData, i, tableName,colList, metaData)
                         elif operator == ">":
                             if (str(row[colToCheck]) > (valueToCheck)):
-                                self.updateRow(tableData, i, colList, metaData)
+                                self.updateRow(tableData, i, tableName,colList, metaData)
                         elif (operator == "<"):
                             if (str(row[colToCheck]) < (valueToCheck)):
-                                self.updateRow(tableData, i, colList, metaData)
+                                self.updateRow(tableData, i, tableName,colList, metaData)
                         elif (operator == ">="):
                             if (str(row[colToCheck]) >= (valueToCheck)):
-                                self.updateRow(tableData, i, colList, metaData)
+                                self.updateRow(tableData, i, tableName,colList, metaData)
                         elif (operator == "<="):
                             if (str(row[colToCheck]) <= (valueToCheck)):
-                                self.updateRow(tableData, i, colList, metaData)
+                                self.updateRow(tableData, i, tableName,colList, metaData)
                         elif (operator == "!="):
                             if (str(row[colToCheck]) != (valueToCheck)):
-                                self.updateRow(tableData, i, colList, metaData)
+                                self.updateRow(tableData, i,tableName, colList, metaData)
                     i = i + 1
         if self.isTransaction():
             self.tableDataList.append(tableData)
@@ -452,7 +522,7 @@ class QueryProcessor:
             with open(tableDataFilePath, 'w') as f:
                 f.truncate()
                 json.dump(tableData, f)
-
+            self.locker.removeLock(tableName, self.databaseName)
         print("Table Updated")
 
     def describeTable(self, tableName):
@@ -464,6 +534,9 @@ class QueryProcessor:
                     "transaction have lock on table " + self.tableName + " Commit or rollback to start new transaction")
         else:
             tableDir = self.databaseDir + tableName + "/"
+            if(not self.checkIfFilePathExist(tableDir)):
+                raise Exception ("Table Name is not Valid")
+
             tableDataFilePath = tableDir + tableName + "_metadata.json"
             metaData = ""
             with open(tableDataFilePath) as file:
@@ -483,6 +556,8 @@ class QueryProcessor:
     def describeDb(self, dbName):
         print(colored("\n#####################################################", 'green'))
         print(colored("\n        Tables in Databse: " + dbName, 'green'))
+        self.databaseDir = "AllDatabase/" + dbName + "/"
         tableList = os.listdir("AllDatabase/" + dbName)
         for table in tableList:
             self.describeTable(table)
+

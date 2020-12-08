@@ -401,7 +401,7 @@ class Parse:
             database=db[0]
             # print(database)
             database=database.lstrip().rstrip()
-            # self.queryProcessor.dump(database)
+            self.queryProcessor.dump(database)
         except IndexError as e:
             print("Error in Query Syntax")   
         except Exception as e:

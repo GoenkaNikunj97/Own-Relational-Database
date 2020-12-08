@@ -399,8 +399,9 @@ class Parse:
         try:
             db=re.compile(r'dump\s(.*).*',re.IGNORECASE).findall(self.query)
             database=db[0]
-            print(database)
-            #function call
+            # print(database)
+            database=database.lstrip().rstrip()
+            # self.queryProcessor.dump(database)
         except IndexError as e:
             print("Error in Query Syntax")   
         except Exception as e:

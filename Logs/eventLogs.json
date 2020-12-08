@@ -1,0 +1,79 @@
+{
+    "logs": [
+        {
+            "Execution Time": "2020-12-08 22:13:49",
+            "query": "create database person_db",
+            "message": "Successfully created database "
+        },
+        {
+            "Execution Time": "2020-12-08 22:14:17",
+            "query": "create table persons (personid int,lastname varchar(255),firstname varchar(255),address varchar(255),city varchar(255))",
+            "message": "Successfully created table persons (personid int,lastname varchar(255),firstname varchar(255),address varchar(255),city varchar from database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 22:15:26",
+            "query": "create table persons(personid int,lastname varchar,firstname varchar,address varchar,city varchar)",
+            "message": "Successfully created table persons from database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 22:17:57",
+            "query": "insert into person(personid,lastname,firstname,address,city) values (1,'goenka','nikunj','india','delhi')",
+            "message": "person Table does not Exist"
+        },
+        {
+            "Execution Time": "2020-12-08 22:18:15",
+            "query": "insert into persond(personid,lastname,firstname,address,city) values (1,'goenka','nikunj','india','delhi')",
+            "message": "persond Table does not Exist"
+        },
+        {
+            "Execution Time": "2020-12-08 22:18:26",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (1,'goenka','nikunj','india','delhi')",
+            "message": "Data successfully inserted into table persons of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 22:23:30",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (2,'jani','mala','canada','halifax')",
+            "message": "Data successfully inserted into table persons of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 22:27:27",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (3,souvik,das,canada,toronto)",
+            "message": "Data successfully inserted into table persons of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 22:28:26",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (4,lastname,firstname,canada,alberta)",
+            "message": "Data successfully inserted into table persons of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 22:29:46",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (3,6ouvik,das,canada,toronto)",
+            "message": "Data successfully inserted into table persons of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 22:30:17",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (3,7orichanshuajhaausaopasadina",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-08 22:30:59",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (4,7arichanshuijhaausalpasadin",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-08 22:32:21",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (4,richanshu,jha,usa,pasadina)",
+            "message": "Data successfully inserted into table persons of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 22:33:07",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (5,pragyan,d,calmiaaindiaolaknow",
+            "message": "Error in select query syntax"
+        },
+        {
+            "Execution Time": "2020-12-08 22:33:51",
+            "query": "insert into persons(personid,lastname,firstname,address,city) values (5,pragyan,dalmia,india,laknowo)",
+            "message": "Data successfully inserted into table persons of database person_db"
+        }
+    ]
+}

@@ -103,6 +103,7 @@ class LockingMechanismChecker:
                         if tableName == entry['Locked Table']:
                             table_found = True
                             temp.remove(entry)
+                            print("Lock has been removed for table: ",tableName )
                             with open(lockFile, 'w') as file:
                                 json.dump(lockData, file, indent=4)
                             break

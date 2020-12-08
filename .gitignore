@@ -1,9 +1,4 @@
 .vscode
 .idea
-AllDatabase/
 __pycache__/
-sql/
-UserLogs/
-Logs/
-Credentials/
 *.pyc

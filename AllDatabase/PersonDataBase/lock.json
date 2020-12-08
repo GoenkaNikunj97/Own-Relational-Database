@@ -1,0 +1,10 @@
+{
+    "Lock": [
+        {
+            "Locked Table": "PERSON"
+        },
+        {
+            "Locked Table": "PERSON2"
+        }
+    ]
+}

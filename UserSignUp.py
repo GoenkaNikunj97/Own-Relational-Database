@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 import base64
@@ -11,14 +12,12 @@ class UserSignUp:
     def __init__(self, userId, password):
         self.userId = userId
         self.password = password
-        self.credentialsDir = "Credentials/"
         self.credentialsFileFullPath = "Credentials/UserCredentials.json"
         self.error = "Please enter valid credentials"
         self.missingDirectory = "Credentials directory does not exists"
         self.missingFile = "UserCredential file does not exists"
 
     def signUp(self):
-
         if not os.path.exists(self.credentialsFileFullPath):
             f = open(self.credentialsFileFullPath, "w")
             f.write("[]")

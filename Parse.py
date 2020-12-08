@@ -59,6 +59,8 @@ class Parse:
             Parse.transcationFlag=True
             self.beginTransaction()
             return
+        elif "dump" in self.query.lower():
+            self.dump()
         elif "quit" in self.query.lower():
             if Parse.transcationFlag:
                 Parse.transcationFlag=False
@@ -389,6 +391,16 @@ class Parse:
                     return 0
                 else:
                     raise Exception("Invalid Query")
+        except IndexError as e:
+            print("Error in Query Syntax")   
+        except Exception as e:
+            print(e)
+    def dump(self):
+        try:
+            db=re.compile(r'dump\s(.*).*',re.IGNORECASE).findall(self.query)
+            database=db[0]
+            print(database)
+            #function call
         except IndexError as e:
             print("Error in Query Syntax")   
         except Exception as e:

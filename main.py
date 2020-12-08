@@ -6,6 +6,8 @@ from termcolor import colored
 import re
 import QueryProcessor as qp
 
+userLogsDir = "UserLogs/UserLogs.json"
+
 
 def userLoginSignUp():
     existing_member = input("Are you an existing member Y/N: ")
@@ -48,14 +50,13 @@ def main():
             database
         query_type = Parse.Parse(database,query,queryProcessor)
         val = query_type.check_query()
-        print("\n#####################################################")
         if val == -1:
-            print(colored("Incorrect Query",'red'))
+            print(colored("Incorrect Query", 'red'))
         elif val == 0:
             break
-    
-    
+
     print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Thanks!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
 
 if __name__ == "__main__":
     main()

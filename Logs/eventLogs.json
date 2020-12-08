@@ -74,6 +74,51 @@
             "Execution Time": "2020-12-08 22:33:51",
             "query": "insert into persons(personid,lastname,firstname,address,city) values (5,pragyan,dalmia,india,laknowo)",
             "message": "Data successfully inserted into table persons of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 13:12:14",
+            "query": "create table postal_code (personid int,postal_code int,foreign key(personid))",
+            "message": "Successfully created table postal_code (personid int,postal_code int,foreign key from database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 13:12:30",
+            "query": "create table postal_code (personid int,postal_code int)",
+            "message": "Successfully created table postal_code from database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 13:13:42",
+            "query": "insert into postal_code (personid,postal_code) values (1,384002)",
+            "message": "Data successfully inserted into table postal_code of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 13:13:49",
+            "query": "insert into postal_code (personid,postal_code) values (2,38403)",
+            "message": "Data successfully inserted into table postal_code of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 13:13:57",
+            "query": "insert into postal_code (personid,postal_code) values (3,384123)",
+            "message": "Data successfully inserted into table postal_code of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 13:15:50",
+            "query": "create table district (postal_code int,district_name varchar)",
+            "message": "Successfully created table district from database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 13:16:47",
+            "query": "insert into district (postal_code,district_name) values (384002,halifax)",
+            "message": "Data successfully inserted into table district of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 13:17:08",
+            "query": "insert into district (postal_code,district_name) values (38403,toronto)",
+            "message": "Data successfully inserted into table district of database person_db"
+        },
+        {
+            "Execution Time": "2020-12-08 13:17:18",
+            "query": "insert into district (postal_code,district_name) values (384123,alberta)",
+            "message": "Data successfully inserted into table district of database person_db"
         }
     ]
 }

@@ -1,0 +1,3 @@
+CREATE TABLE district ( postal_code int,district_name str );
+CREATE TABLE persons ( personid int,lastname str,firstname str,address str,city str );
+CREATE TABLE postal_code ( personid int,postal_code int );

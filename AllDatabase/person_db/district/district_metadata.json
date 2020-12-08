@@ -1,0 +1,1 @@
+{"table_name": "district", "columns": {"postal_code": "int", "district_name": "str"}, "primary_key": [], "foreign_key": ["postal_code"]}

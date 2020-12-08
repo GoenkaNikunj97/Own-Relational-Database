@@ -1,0 +1,2 @@
+CREATE TABLE table1 ( id int,name str,city str );
+CREATE TABLE table2 ( id int,name str,city str );

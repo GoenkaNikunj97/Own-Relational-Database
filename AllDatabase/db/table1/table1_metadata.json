@@ -1,0 +1,10 @@
+{
+    "table_name": "table1",
+    "columns": {
+        "id": "int",
+        "name": "str",
+        "city": "str"
+    },
+    "primary_key": [],
+    "foreign_key": []
+}

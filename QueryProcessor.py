@@ -130,6 +130,8 @@ class QueryProcessor:
             tableList = os.listdir("AllDatabase/" + dbName)
             queryList = ""
             for table in tableList:
+                if table == "lock.json":
+                    continue
                 query = "CREATE TABLE " + table + " ( "
 
                 tableDir = databaseDir + table + "/"
@@ -559,5 +561,7 @@ class QueryProcessor:
         self.databaseDir = "AllDatabase/" + dbName + "/"
         tableList = os.listdir("AllDatabase/" + dbName)
         for table in tableList:
+            if table == "lock.json":
+                continue
             self.describeTable(table)
 

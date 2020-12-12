@@ -1,3 +1,28 @@
+
+-- Table structure for table `district`
 CREATE TABLE district ( postal_code int,district_name str );
+
+-- Dumping data for table `district`
+INSERT INTO district ( postal_code,district_name ) VALUES ( 384002,halifax );
+INSERT INTO district ( postal_code,district_name ) VALUES ( 38403,toronto );
+INSERT INTO district ( postal_code,district_name ) VALUES ( 384123,alberta );
+
+-- Table structure for table `persons`
 CREATE TABLE persons ( personid int,lastname str,firstname str,address str,city str );
+
+-- Dumping data for table `persons`
+INSERT INTO persons ( personid,lastname,firstname,address,city ) VALUES ( 1,goenka,nikunj,india,delhi );
+INSERT INTO persons ( personid,lastname,firstname,address,city ) VALUES ( 2,jani,malav,canada,halifax );
+INSERT INTO persons ( personid,lastname,firstname,address,city ) VALUES ( 3,souvik,das,canada,toronto );
+INSERT INTO persons ( personid,lastname,firstname,address,city ) VALUES ( 4,lastname,firstname,canada,alberta );
+INSERT INTO persons ( personid,lastname,firstname,address,city ) VALUES ( 3,6ouvik,das,canada,toronto );
+INSERT INTO persons ( personid,lastname,firstname,address,city ) VALUES ( 4,richanshu,jha,usa,pasadina );
+INSERT INTO persons ( personid,lastname,firstname,address,city ) VALUES ( 5,pragyan,dalmia,india,laknowo );
+
+-- Table structure for table `postal_code`
 CREATE TABLE postal_code ( personid int,postal_code int );
+
+-- Dumping data for table `postal_code`
+INSERT INTO postal_code ( personid,postal_code ) VALUES ( 1,384002 );
+INSERT INTO postal_code ( personid,postal_code ) VALUES ( 2,38403 );
+INSERT INTO postal_code ( personid,postal_code ) VALUES ( 3,384123 );

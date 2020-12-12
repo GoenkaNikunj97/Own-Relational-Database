@@ -257,7 +257,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
     '''
-
+    '''
     try:
         # selecting DB, (run CREATE DB CODE FIRST)
         queryProcessor.useDb("nikunjdb")
@@ -275,3 +275,5 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(e)
+    '''
+    queryProcessor.dump("person_db")

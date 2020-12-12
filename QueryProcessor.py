@@ -2,6 +2,7 @@ import os
 import json
 import shutil
 from termcolor import colored
+
 # User_defined Classes
 import DataType
 import Presentation
@@ -123,6 +124,21 @@ class QueryProcessor:
         else:
             raise Exception("Wrong Table Name")
 
+    def saveToSQLFile(self,folderPath,dbName,queryList,message=""):
+
+        if (self.checkIfFilePathExist(folderPath)):
+            pass
+        else:
+            os.makedirs("sql")
+        dumpLocation = "sql/" + dbName + ".txt"
+        with open(dumpLocation, 'w') as f:
+            f.truncate()
+            f.write(message)
+            f.write(queryList)
+
+        print("SQL Dump Created at location: " + dumpLocation)
+
+
     def dump(self, dbName):
         dbDir = "AllDatabase/" + dbName
         if (self.checkIfFilePathExist(dbDir)):
@@ -132,34 +148,45 @@ class QueryProcessor:
             for table in tableList:
                 if table == "lock.json":
                     continue
+                queryList = queryList + "\n"
+                queryList = queryList + "-- Table structure for table `" +table +"`"+"\n"
                 query = "CREATE TABLE " + table + " ( "
-
+                valueQuery = "INSERT INTO "+ table + " ( "
                 tableDir = databaseDir + table + "/"
                 tableDataFilePath = tableDir + table + "_metadata.json"
+                tableData = tableDir + table + "_data.json"
 
-                metaData = ""
 
                 with open(tableDataFilePath) as file:
                     metaData = json.load(file)
 
+                with open(tableData) as file:
+                    tableData = json.load(file)
+
                 for key in metaData["columns"]:
                     query = query + key + " " + metaData["columns"][key] + ","
+                    valueQuery = valueQuery + key + ","
 
                 query = query.rstrip(query[-1])
+                valueQuery = valueQuery.rstrip(valueQuery[-1])
                 query = query + " );"
-                queryList = queryList + query + "\n"
+                valueQuery = valueQuery + " ) VALUES ( "
+                queryList = queryList + query + "\n\n"
+                queryList = queryList + "-- Dumping data for table `" + table +"`"+"\n"
+
+                for data in tableData:
+                    insertQuery = valueQuery
+                    for value in data.values():
+                        insertQuery = insertQuery + str(value) + ","
+
+                    insertQuery = insertQuery.rstrip(insertQuery[-1])
+                    insertQuery = insertQuery + " );"
+                    queryList = queryList + insertQuery+ "\n"
 
             sqlFolder = "sql"
-            if (self.checkIfFilePathExist(sqlFolder)):
-                pass
-            else:
-                os.makedirs("sql")
-            dumpLocation = "sql/" + dbName + ".txt"
-            with open(dumpLocation, 'w') as f:
-                f.truncate()
-                f.write(queryList)
 
-            print("SQL Dump Created at location: "+dumpLocation )
+            self.saveToSQLFile(sqlFolder,dbName,queryList)
+
         else:
             raise Exception("Database " + dbName + " Does Not Exist")
 
@@ -565,3 +592,37 @@ class QueryProcessor:
                 continue
             self.describeTable(table)
 
+    def showErd(self, dbName):
+        databaseDir = "AllDatabase/" + dbName
+        if (self.checkIfFilePathExist(databaseDir)):
+            print("=================  ER Diagram for ",dbName," is below  ==============")
+            print("{:<15}".format('Table-1'), "{:<15}".format('Column'), "{:<15}".format('------->'),
+                  "{:<15}".format('Table-2'), "{:<15}".format('Column'))
+            databaseDir = databaseDir + "/"
+            tableList = os.listdir("AllDatabase/" + dbName)
+
+            for table in tableList:
+                if table == "lock.json":
+                    continue
+                tableDir = databaseDir + table + "/"
+                tableDataFilePath = tableDir + table + "_metadata.json"
+
+                metaData = ""
+                with open(tableDataFilePath) as file:
+                    metaData = json.load(file)
+                if (len(metaData["foreign_key"]) <= 0):
+                    break
+                for data in metaData["foreign_key"]:
+                    foreignTable = list(data)[1]
+                    foreignTableDir = databaseDir + foreignTable + "/"
+                    if (self.checkIfFilePathExist(foreignTableDir)):
+
+                        print("{:<15}".format(metaData['table_name']), end=' ')
+                        print("{:<15}".format(data["column"]), end=' ')
+                        print("{:<15}".format('------->'), end=' ')
+                        print("{:<15}".format(foreignTable), end=' ')
+                        print("{:<15}".format(data[foreignTable]), end=' ')
+                        print()
+
+                    else:
+                        raise Exception(foreignTable, " does not exist in database")

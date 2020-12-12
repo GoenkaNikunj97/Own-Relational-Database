@@ -1,1 +1,19 @@
-{"table_name": "persons", "columns": {"personid": "int", "lastname": "str", "firstname": "str", "address": "str", "city": "str"}, "primary_key": ["personid"], "foreign_key": []}
+{
+   "table_name":"persons",
+   "columns":{
+      "personid":"int",
+      "lastname":"str",
+      "firstname":"str",
+      "address":"str",
+      "city":"str"
+   },
+   "primary_key":[
+      "personid"
+   ],
+   "foreign_key":[
+      {
+         "column": "personid",
+         "postal_code": "personid"
+      }
+   ]
+}

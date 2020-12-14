@@ -591,6 +591,20 @@ class QueryProcessor:
             if table == "lock.json":
                 continue
             self.describeTable(table)
+    def getCardinality(self, tableDir,table_name, column):
+        tableDataFilePath = tableDir + table_name + "_data.json"
+
+        with open(tableDataFilePath) as file:
+            data = json.load(file)
+
+        check = list()
+        for row in data:
+            if row[column] in check:
+                return "N"
+            else:
+                check.append(row[column])
+        return "1"
+
 
     def showErd(self, dbName):
         databaseDir = "AllDatabase/" + dbName
@@ -619,10 +633,15 @@ class QueryProcessor:
 
                         print("{:<15}".format(metaData['table_name']), end=' ')
                         print("{:<15}".format(data["column"]), end=' ')
-                        print("{:<15}".format('------->'), end=' ')
+                        print("{:<15}".format('---('+
+                                              self.getCardinality(tableDir,metaData['table_name'],data["column"])+
+                                              "-"+self.getCardinality(databaseDir+foreignTable+"/",foreignTable,data[foreignTable])
+                                              +')---->'), end=' ')
                         print("{:<15}".format(foreignTable), end=' ')
                         print("{:<15}".format(data[foreignTable]), end=' ')
                         print()
 
                     else:
                         raise Exception(foreignTable, " does not exist in database")
+
+            print()

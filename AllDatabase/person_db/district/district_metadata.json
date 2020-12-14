@@ -1,7 +1,7 @@
 {
    "table_name":"district",
    "columns":{
-      "postal_code":"int",
+      "postal":"int",
       "district_name":"str"
    },
    "primary_key":[
@@ -9,7 +9,7 @@
    ],
    "foreign_key":[
      {
-       "column": "postal_code",
+       "column": "postal",
        "postal_code": "postal_code"
      }
    ]

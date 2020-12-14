@@ -51,6 +51,8 @@ class Parse:
             self.drop()
         elif "describe" in self.query.lower() or "desc" in self.query.lower():
             self.describe()
+        elif "erd" in self.query.lower():
+            self.showERD()
         elif "begin transaction" in self.query.lower():
             if self.database == "":
                 self.log.pushLog(self.query,constants.db_missing)
@@ -109,6 +111,13 @@ class Parse:
  
         else:
             return -1
+
+    def showERD(self):
+        try:
+            dbName = re.compile(r'ERD\s*(.*).*', re.IGNORECASE).findall(self.query)
+            self.queryProcessor.showErd(dbName[0])
+        except Exception as e:
+            print(e)
 
     def select(self):
         try:
